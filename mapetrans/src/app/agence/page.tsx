@@ -48,7 +48,7 @@ export default function AgencePage() {
             <div className="flex flex-col leading-none cursor-pointer group pr-2">
               <Link href="/">
                 <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
-                  MAPETRANS<span className="text-blue-700">.LD</span>
+                  MAPETRANS LD
                 </span>
               </Link>
               <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
@@ -124,7 +124,7 @@ export default function AgencePage() {
             L'Excellence du Transport <br/> <span className="text-blue-500">au cœur du Loiret</span>
           </h1>
           <p className="text-slate-200 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
-            Basés à Orléans, nous sommes votre partenaire unique pour le transport de personnes, le fret urgent et le déménagement depuis 2015.
+            Basés à Orléans, nous sommes votre partenaire unique pour le transport de personnes, le fret urgent et le déménagement depuis 2013.
           </p>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function AgencePage() {
             <h2 className="text-3xl font-black text-slate-900 uppercase">Plus qu'un transporteur, <br/>un <span className="text-blue-600">partenaire de confiance</span></h2>
             <div className="w-20 h-1 bg-blue-600"></div>
             <p className="text-slate-600 text-sm leading-relaxed text-justify">
-              Fondée en <strong>2015 à Orléans</strong>, <strong>MAPETRANS.LD</strong> est née d'une volonté simple : offrir un service de transport global, rigoureux et humain aux particuliers comme aux entreprises de la région.
+              Fondée en <strong>2013 à Orléans</strong>, <strong>MAPETRANS.LD</strong> est née d'une volonté simple : offrir un service de transport global, rigoureux et humain aux particuliers comme aux entreprises de la région.
             </p>
             <p className="text-slate-600 text-sm leading-relaxed text-justify">
               Face aux grandes plateformes impersonnelles, nous avons fait le choix de la <strong>proximité</strong>. Que vous ayez besoin d'une berline pour un transfert VIP, d'un camion pour un fret urgent ou d'une équipe pour votre déménagement, vous parlez à un interlocuteur unique qui maîtrise votre dossier de A à Z.
@@ -238,8 +238,8 @@ export default function AgencePage() {
         <div id="contact" className="bg-black text-white py-12 px-6 border-b border-slate-800">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
-              <div className="flex flex-col leading-none mb-6"><span className="text-xl font-black tracking-tighter text-white">MAPETRANS<span className="text-blue-700">.LD</span></span><span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Solutions de Transport</span></div>
-              <p className="text-slate-400 text-xs leading-relaxed text-justify">Partenaire expert depuis 2015. Nous assurons vos transports critiques, navettes VIP et déménagements avec une exigence de qualité unique. Licences et assurances à jour.</p>
+              <div className="flex flex-col leading-none mb-6"><span className="text-xl font-black tracking-tighter text-white">MAPETRANS LD</span><span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Solutions de Transport</span></div>
+              <p className="text-slate-400 text-xs leading-relaxed text-justify">Partenaire expert depuis 2013. Nous assurons vos transports critiques, navettes VIP et déménagements avec une exigence de qualité unique. Licences et assurances à jour.</p>
             </div>
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">Nos Services</h3>
@@ -264,7 +264,7 @@ export default function AgencePage() {
 
         <div className="bg-black py-6 px-6">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 uppercase tracking-wide gap-4">
-            <span>Copyright 2025, MapetransLD. Tous droits réservés.</span>
+            <span>Copyright 2025, Mapetrans LD. Tous droits réservés.</span>
             <div className="flex gap-6">
               <Link href="#" className="hover:text-slate-400 transition">Mentions Légales</Link>
               <Link href="#" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>

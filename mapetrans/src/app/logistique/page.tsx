@@ -19,8 +19,7 @@ export default function LogistiquePage() {
   };
 
   return (
-    <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-32 xl:pt-36 flex flex-col">
-      
+    <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[120px] flex flex-col">
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -90,7 +89,13 @@ export default function LogistiquePage() {
               <div className="hidden xl:flex items-center gap-6 pl-6">
                 <div className="flex flex-col items-end text-right">
                   <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Service Exploitation</span>
-                  <span className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono">06 34 60 57 99</span>
+                  <a
+  href="tel:0634605799"
+  className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono whitespace-nowrap"
+>
+  06 34 60 57 99
+</a>
+
                 </div>
                 <Link href="#cotation" className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-sm font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase">
                   Demande de Cotation

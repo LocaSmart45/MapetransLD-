@@ -105,7 +105,7 @@ export default function VTCPage() {
             <div className="flex flex-col leading-none cursor-pointer group pr-2">
               <Link href="/">
                 <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
-                  MAPETRANS<span className="text-blue-700">.LD</span>
+                  MAPETRANS <span className="text-blue-700">LD</span>
                 </span>
               </Link>
               <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
@@ -378,7 +378,7 @@ export default function VTCPage() {
         <div id="contact" className="bg-black text-white py-12 px-6 border-b border-slate-800">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
-              <div className="flex flex-col leading-none mb-6"><span className="text-xl font-black tracking-tighter text-white">MAPETRANS<span className="text-blue-700">.LD</span></span><span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Solutions de Transport</span></div>
+              <div className="flex flex-col leading-none mb-6"><span className="text-xl font-black tracking-tighter text-white">MAPETRANS LD<span className="text-blue-700">.LD</span></span><span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Solutions de Transport</span></div>
               <p className="text-slate-400 text-xs leading-relaxed text-justify">Partenaire expert depuis 2015. Nous assurons vos transports critiques, navettes VIP et déménagements avec une exigence de qualité unique. Licences et assurances à jour.</p>
             </div>
             <div>
@@ -404,7 +404,7 @@ export default function VTCPage() {
 
         <div className="bg-black py-6 px-6">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 uppercase tracking-wide gap-4">
-            <span>Copyright 2025, MapetransLD. Tous droits réservés.</span>
+            <span>Copyright 2025, Mapetrans LD. Tous droits réservés.</span>
             <div className="flex gap-6">
               <Link href="#" className="hover:text-slate-400 transition">Mentions Légales</Link>
               <Link href="#" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
