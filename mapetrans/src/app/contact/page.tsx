@@ -58,7 +58,7 @@ export default function ContactPage() {
             <div className="flex flex-col leading-none cursor-pointer group pr-2">
               <Link href="/">
                 <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
-                  MAPETRANS LD
+                  MAPETRANS <span className="text-blue-700">LD</span>
                 </span>
               </Link>
               <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
@@ -180,7 +180,7 @@ export default function ContactPage() {
                         <div>
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Siège Social</p>
                             <p className="text-lg font-bold text-slate-900 leading-snug">
-                                10 rue de la République,<br/> 45000 Orléans
+                                2C Rue des Vergers,<br/> 45400 Fleury Les Aubrais
                             </p>
                             <p className="text-xs text-slate-500 mt-2 italic">Uniquement sur rendez-vous.</p>
                         </div>

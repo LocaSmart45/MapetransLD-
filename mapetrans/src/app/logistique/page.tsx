@@ -56,7 +56,7 @@ export default function LogistiquePage() {
             <div className="flex flex-col leading-none cursor-pointer group pr-2">
               <Link href="/">
                 <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
-                  MAPETRANS<span className="text-blue-700">.LD</span>
+                  MAPETRANS <span className="text-blue-700">LD</span>
                 </span>
               </Link>
               <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">

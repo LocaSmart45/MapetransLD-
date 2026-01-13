@@ -48,7 +48,7 @@ export default function AgencePage() {
             <div className="flex flex-col leading-none cursor-pointer group pr-2">
               <Link href="/">
                 <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
-                  MAPETRANS LD
+                  MAPETRANS <span className="text-blue-700">LD</span>
                 </span>
               </Link>
               <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
@@ -137,7 +137,7 @@ export default function AgencePage() {
             <h2 className="text-3xl font-black text-slate-900 uppercase">Plus qu'un transporteur, <br/>un <span className="text-blue-600">partenaire de confiance</span></h2>
             <div className="w-20 h-1 bg-blue-600"></div>
             <p className="text-slate-600 text-sm leading-relaxed text-justify">
-              Fondée en <strong>2013 à Orléans</strong>, <strong>MAPETRANS.LD</strong> est née d'une volonté simple : offrir un service de transport global, rigoureux et humain aux particuliers comme aux entreprises de la région.
+              Fondée en <strong>2013 à Orléans</strong>, <strong>MAPETRANS LD</strong> est née d'une volonté simple : offrir un service de transport global, rigoureux et humain aux particuliers comme aux entreprises de la région.
             </p>
             <p className="text-slate-600 text-sm leading-relaxed text-justify">
               Face aux grandes plateformes impersonnelles, nous avons fait le choix de la <strong>proximité</strong>. Que vous ayez besoin d'une berline pour un transfert VIP, d'un camion pour un fret urgent ou d'une équipe pour votre déménagement, vous parlez à un interlocuteur unique qui maîtrise votre dossier de A à Z.
