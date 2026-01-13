@@ -725,7 +725,7 @@ export default function Home() {
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                     Message
                   </label>
-                  <textarea name="message" name="message"
+                  <textarea name="message"
                     rows={4}
                     className="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
                     placeholder="Expliquez votre besoin (date, trajets, volume, urgence...)"
