@@ -657,22 +657,37 @@ export default function Home() {
 
               <form className="grid grid-cols-1 md:grid-cols-2 gap-3" onSubmit={async (e) => {
   e.preventDefault();
-  const fd = new FormData(e.currentTarget);
+
+  const form = e.currentTarget;
+  const fd = new FormData(form);
+
   try {
-    await sendLead({
-      type: "callback",
-      source: "home",
-      name: String(fd.get("name") || ""),
-      company: String(fd.get("company") || ""),
-      phone: String(fd.get("phone") || ""),
-      email: String(fd.get("email") || ""),
-      message: String(fd.get("message") || ""),
+    const res = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "callback",
+        source: "home",
+        name: fd.get("name"),
+        company: fd.get("company"),
+        phone: fd.get("phone"),
+        email: fd.get("email"),
+        message: fd.get("message"),
+      }),
     });
+
+    const out = await res.json().catch(() => ({}));
+
+    if (!res.ok || out.ok === false) {
+      alert("❌ Erreur d’envoi. Réessayez ou appelez-nous.");
+      return;
+    }
+
     alert("✅ Demande envoyée ! Nous vous rappelons rapidement.");
     setIsCallbackOpen(false);
-    e.currentTarget.reset();
+    form.reset();
   } catch {
-    alert("❌ Erreur d’envoi. Réessayez ou appelez-nous.");
+    alert("❌ Erreur réseau. Réessayez ou appelez-nous.");
   }
 }}>
                 <div className="md:col-span-1">
