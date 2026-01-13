@@ -52,10 +52,10 @@ export default function LogistiquePage() {
         </div>
 
         <nav className="border-b border-slate-200 h-20 md:h-24 flex items-center relative bg-white z-50">
-          <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
-            <div className="flex flex-col leading-none cursor-pointer group pr-2">
+          <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center gap-4">
+            <div className="flex flex-col leading-none cursor-pointer group pr-2 shrink-0">
               <Link href="/">
-                <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
+                <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 whitespace-nowrap">
                   MAPETRANS <span className="text-blue-700">LD</span>
                 </span>
               </Link>
@@ -331,7 +331,7 @@ export default function LogistiquePage() {
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
               <div className="flex flex-col leading-none mb-6"><span className="text-xl font-black tracking-tighter text-white">MAPETRANS<span className="text-blue-700">.LD</span></span><span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Solutions de Transport</span></div>
-              <p className="text-slate-400 text-xs leading-relaxed text-justify">Partenaire expert depuis 2015. Nous assurons vos transports critiques, navettes VIP et déménagements.</p>
+              <p className="text-slate-400 text-xs leading-relaxed text-justify">Partenaire expert depuis 2013. Nous assurons vos transports critiques, navettes VIP et déménagements.</p>
             </div>
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">Nos Services</h3>

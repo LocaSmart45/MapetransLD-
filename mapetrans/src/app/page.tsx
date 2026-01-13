@@ -1,5 +1,15 @@
 "use client";
 
+async function sendLead(payload: any) {
+  const res = await fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("lead_failed");
+}
+
+
 import React, { useRef, useState } from "react";
 import {
   ArrowRight,
@@ -645,7 +655,26 @@ export default function Home() {
                 Laissez vos coordonnées. Réponse rapide (24/7 si urgence).
               </p>
 
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <form className="grid grid-cols-1 md:grid-cols-2 gap-3" onSubmit={async (e) => {
+  e.preventDefault();
+  const fd = new FormData(e.currentTarget);
+  try {
+    await sendLead({
+      type: "callback",
+      source: "home",
+      name: String(fd.get("name") || ""),
+      company: String(fd.get("company") || ""),
+      phone: String(fd.get("phone") || ""),
+      email: String(fd.get("email") || ""),
+      message: String(fd.get("message") || ""),
+    });
+    alert("✅ Demande envoyée ! Nous vous rappelons rapidement.");
+    setIsCallbackOpen(false);
+    e.currentTarget.reset();
+  } catch {
+    alert("❌ Erreur d’envoi. Réessayez ou appelez-nous.");
+  }
+}}>
                 <div className="md:col-span-1">
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                     Nom *
@@ -654,7 +683,7 @@ export default function Home() {
                     required
                     type="text"
                     className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    placeholder="Votre nom"
+                    name="name" placeholder="Votre nom"
                   />
                 </div>
 
@@ -665,7 +694,7 @@ export default function Home() {
                   <input
                     type="text"
                     className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    placeholder="Entreprise (optionnel)"
+                    name="company" placeholder="Entreprise (optionnel)"
                   />
                 </div>
 
@@ -677,7 +706,7 @@ export default function Home() {
                     required
                     type="tel"
                     className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    placeholder="06 xx xx xx xx"
+                    name="phone" placeholder="06 xx xx xx xx"
                   />
                 </div>
 
@@ -686,7 +715,7 @@ export default function Home() {
                     Email
                   </label>
                   <input
-                    type="email"
+                    name="email" type="email"
                     className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
                     placeholder="email@exemple.com"
                   />
@@ -696,7 +725,7 @@ export default function Home() {
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                     Message
                   </label>
-                  <textarea
+                  <textarea name="message" name="message"
                     rows={4}
                     className="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
                     placeholder="Expliquez votre besoin (date, trajets, volume, urgence...)"
