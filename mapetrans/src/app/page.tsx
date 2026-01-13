@@ -658,8 +658,12 @@ export default function Home() {
               <form className="grid grid-cols-1 md:grid-cols-2 gap-3" onSubmit={async (e) => {
   e.preventDefault();
 
-  const form = e.currentTarget;
-  const fd = new FormData(form);
+  const form = e.currentTarget as any;
+  if (form.__sending) return;
+  form.__sending = true;
+
+  const formEl = e.currentTarget as HTMLFormElement;
+  const fd = new FormData(formEl);
 
   try {
     const res = await fetch("/api/leads", {
@@ -689,6 +693,8 @@ export default function Home() {
   } catch {
     alert("❌ Erreur réseau. Réessayez ou appelez-nous.");
   }
+
+  form.__sending = false;
 }}>
                 <div className="md:col-span-1">
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
