@@ -303,13 +303,13 @@ export default function VTCPage() {
                     <div className="col-span-2 text-xs font-bold text-blue-800 uppercase mb-1">Information Retour</div>
                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date Retour</label><input type="date" name="date_retour" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure Retour</label><input type="time" name="time_retour" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
-                    <div className="col-span-2"><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° Vol/Train Retour (Optionnel)</label><input type="text" name="vol_train_retour" placeholder="Ex: AF9999" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
+                    <div className="col-span-2"><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° Vol/Train Retour </label><input type="text" name="vol_train_retour" placeholder="Ex: AF9999" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
                   </div>
               )}
 
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse de Départ</label><input type="text" name="depart" placeholder="Ex: 10 rue de la République, Orléans" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Destination</label><input type="text" name="destination" placeholder="Ex: Aéroport Orly Terminal 2..." required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° de Vol / Train Aller (Optionnel)</label><div className="relative"><Plane className="w-4 h-4 text-slate-400 absolute left-3 top-3" /><input type="text" name="vol_train" placeholder="Ex: AF1234 ou TGV 8540" className="w-full h-10 border border-slate-300 rounded-sm pl-9 pr-3 text-sm font-medium focus:border-blue-600 outline-none" /></div></div>
+              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° de Vol / Train Aller </label><div className="relative"><Plane className="w-4 h-4 text-slate-400 absolute left-3 top-3" /><input type="text" name="vol_train" placeholder="Ex: AF1234 ou TGV 8540" className="w-full h-10 border border-slate-300 rounded-sm pl-9 pr-3 text-sm font-medium focus:border-blue-600 outline-none" /></div></div>
             </div>
             
             <div className="space-y-5">
