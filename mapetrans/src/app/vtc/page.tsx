@@ -4,27 +4,91 @@ import React, { useState, useRef } from 'react';
 import { ArrowRight, CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, Globe, ArrowUpRight, Star, Moon, Calendar, Info, Briefcase, Plane, User, Send, Loader2, Train, PhoneCall } from 'lucide-react';
 import Link from 'next/link';
 
+// === FONCTION HELPER (Doit être après les imports) ===
+async function postLead(payload: any) {
+  const res = await fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok || out.ok === false) throw new Error(out.error || "lead_failed");
+  return out;
+}
+
 export default function VTCPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
   const form = useRef<HTMLFormElement>(null);
 
-  // Envoi formulaire réservation
-  const sendEmail = (e: React.FormEvent) => {
+  // === Envoi via SheetMonkey ===
+  const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formEl = e.currentTarget as HTMLFormElement;
+    const fd = new FormData(formEl);
+
     setIsSending(true);
-    setTimeout(() => {
-        alert("✅ Demande envoyée !");
-        setIsSending(false);
-    }, 1000);
+
+    const data = {
+      "Date Demande": new Date().toLocaleString("fr-FR"),
+      "Date Trajet": fd.get("date"),
+      "Heure D'Arrivée Prévue": fd.get("time"),
+      "Départ": fd.get("depart"),
+      "Destination": fd.get("destination"),
+      "Vol/Train": fd.get("vol_train"),
+      "Nb Passagers": fd.get("passagers"),
+      "Véhicule": fd.get("vehicule"),
+      "Nom Client": fd.get("nom_client"),
+      "Téléphone": fd.get("telephone"),
+      "Email": fd.get("user_email"),
+      "Informations Spécifiques": fd.get("details"),
+      "Type": "Réservation VTC"
+    };
+
+    try {
+      const response = await fetch("https://api.sheetmonkey.io/form/8NGJZStvYwDkdp9kT7hv6E", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("✅ Demande envoyée avec succès ! Nous vous confirmons la disponibilité sous 1h.");
+        formEl.reset();
+      } else {
+        alert("❌ Erreur lors de l'envoi.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("❌ Problème de connexion. Vérifiez votre internet.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   // Envoi demande de rappel PRO
-  const handleCallbackRequest = (e: React.FormEvent) => {
+  const handleCallbackRequest = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("📞 Demande de rappel enregistrée ! Un conseiller Pro vous rappelle dans 15min.");
-    setIsCallbackModalOpen(false);
+    const formEl = e.currentTarget as HTMLFormElement;
+    const fd = new FormData(formEl);
+
+    try {
+      await postLead({
+        type: "callback",
+        source: "vtc",
+        company: String(fd.get("company") || ""),
+        phone: String(fd.get("phone") || ""),
+        message: "Rappel Prioritaire (B2B)",
+      });
+
+      alert("✅ Demande envoyée ! Un conseiller Pro vous rappelle rapidement.");
+      setIsCallbackModalOpen(false);
+      formEl.reset();
+    } catch (err: any) {
+      alert("❌ Erreur d’envoi. Réessayez ou appelez-nous.");
+    }
   };
 
   return (
@@ -69,11 +133,11 @@ export default function VTCPage() {
             <form onSubmit={handleCallbackRequest} className="p-6 space-y-4">
               <div>
                 <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nom de la société</label>
-                <input type="text" required placeholder="Ex: Mapetrans SAS" className="w-full h-12 border border-slate-300 rounded-sm px-4 font-bold text-slate-800 outline-none focus:border-blue-700 bg-slate-50" />
+                <input type="text" required name="company" placeholder="Ex: Mapetrans SAS" className="w-full h-12 border border-slate-300 rounded-sm px-4 font-bold text-slate-800 outline-none focus:border-blue-700 bg-slate-50" />
               </div>
               <div>
                 <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Numéro direct</label>
-                <input type="tel" required placeholder="06 00 00 00 00" className="w-full h-12 border border-slate-300 rounded-sm px-4 font-bold text-slate-800 outline-none focus:border-blue-700 bg-slate-50" />
+                <input type="tel" required name="phone" placeholder="06 00 00 00 00" className="w-full h-12 border border-slate-300 rounded-sm px-4 font-bold text-slate-800 outline-none focus:border-blue-700 bg-slate-50" />
               </div>
               <button type="submit" className="w-full h-12 bg-slate-900 text-white font-bold uppercase tracking-wide rounded-sm hover:bg-black transition shadow-lg mt-2">
                 Me faire rappeler
@@ -164,7 +228,7 @@ export default function VTCPage() {
         )}
       </header>
 
-      {/* === HERO VTC === */}
+      {/* === 1. HERO VTC === */}
       <div className="relative h-[450px] w-full overflow-hidden flex items-center justify-center bg-slate-900">
         <img 
           src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop" 
@@ -185,7 +249,6 @@ export default function VTCPage() {
             Alternative Taxi haut de gamme, tarifs fixes et service de véhicule privatif non partagé.
           </p>
           <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center items-center">
-            {/* BOUTON MODIFIÉ : APPEL DIRECT ICI (Déclenche l'appel sur mobile/desktop) */}
             <a href="tel:0634605799" className="bg-white text-slate-900 px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-slate-100 transition shadow-lg inline-flex items-center gap-2 transform hover:scale-105 duration-300">
               <Phone className="w-4 h-4"/> Une demande particulière ?
             </a>
@@ -197,47 +260,64 @@ export default function VTCPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 w-full py-16 animate-fade-in delay-100">
-        
-        {/* SECTION PRO & ENTREPRISES */}
-        <div className="mb-20 bg-slate-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
-          <div className="relative z-10 grid md:grid-cols-2 gap-10 items-center">
-            <div>
-              <span className="text-blue-400 font-bold tracking-widest text-xs uppercase mb-2 block">Service B2B</span>
-              <h2 className="text-3xl font-black uppercase mb-4">Professionnels & Entreprises</h2>
-              <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                Mapetrans.LD est le partenaire privilégié des entreprises du Loiret pour la gestion des déplacements collaborateurs et VIP. Solutions sur mesure adaptées à vos besoins réguliers.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle className="w-5 h-5 text-blue-500"/> Facturation mensuelle fin de mois</li>
-                <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle className="w-5 h-5 text-blue-500"/> Navettes régulières (Matin/Soir)</li>
-                <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle className="w-5 h-5 text-blue-500"/> Priorité de réservation & Ligne dédiée</li>
-              </ul>
-              <div className="mt-8">
-                {/* L'ancienne modale est conservée ici pour le rappel Pro (Moins urgent que le bouton Hero) */}
-                <button onClick={() => setIsCallbackModalOpen(true)} className="inline-flex items-center gap-2 text-blue-400 font-bold uppercase text-xs hover:text-white transition group">
-                  Demander à être rappelé <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform"/>
-                </button>
-              </div>
-            </div>
-            <div className="bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-sm">
-              <Briefcase className="w-10 h-10 text-blue-500 mb-4" />
-              <h3 className="text-xl font-bold mb-2">Navettes Salariés</h3>
-              <p className="text-xs text-slate-400 mb-6">
-                Mise en place de lignes régulières pour le transport de vos équipes entre la gare d'Orléans/Fleury et vos bureaux.
-              </p>
-              <div className="h-px w-full bg-white/10 mb-6"></div>
-              <Building2 className="w-10 h-10 text-blue-500 mb-4" />
-              <h3 className="text-xl font-bold mb-2">Événementiel</h3>
-              <p className="text-xs text-slate-400">
-                Gestion logistique complète pour vos séminaires, congrès et visites de sites industriels.
-              </p>
-            </div>
+      {/* === 2. FORMULAIRE === */}
+      <div id="booking" className="relative z-20 px-4 max-w-5xl mx-auto w-full -mt-0 mt-12 mb-20 animate-fade-in delay-100">
+        <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
+          <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
+            <div className="flex items-center gap-3"><Calendar className="w-6 h-6 text-blue-500" /><div><h3 className="text-lg font-black uppercase">Demande de Réservation</h3><p className="text-xs text-slate-400">Confirmation de disponibilité sous 1h.</p></div></div>
+            <div className="hidden md:block text-right"><div className="text-[10px] uppercase font-bold text-slate-500">Besoin d'aide ?</div><div className="font-mono font-bold text-lg">06 34 60 57 99</div></div>
           </div>
-        </div>
+          <form ref={form} onSubmit={sendEmail} className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <div className="space-y-5">
+              <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2"><MapPin className="w-4 h-4"/> Détails du trajet</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date</label><input type="date" name="date" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
+                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure de Vol/Train</label><input type="time" name="time" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
+              </div>
+              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse de Départ</label><input type="text" name="depart" placeholder="Ex: 10 rue de la République, Orléans" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
+              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Destination</label><input type="text" name="destination" placeholder="Ex: Aéroport Orly Terminal 2..." required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
+              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° de Vol / Train (Optionnel)</label><div className="relative"><Plane className="w-4 h-4 text-slate-400 absolute left-3 top-3" /><input type="text" name="vol_train" placeholder="Ex: AF1234 ou TGV 8540" className="w-full h-10 border border-slate-300 rounded-sm pl-9 pr-3 text-sm font-medium focus:border-blue-600 outline-none" /></div></div>
+            </div>
+            
+            <div className="space-y-5">
+              <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2"><User className="w-4 h-4"/> Passagers & Contact</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nb Passagers</label><select name="passagers" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white"><option value="1">1 personne</option><option value="2">2 personnes</option><option value="3">3 personnes</option><option value="4">4 personnes</option><option value="5-8">5 à 8 personnes</option></select></div>
+                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Véhicule</label><select name="vehicule" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white"><option value="Berline">Berline Confort</option><option value="Van">Van (Groupe/Bagages)</option></select></div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nom Complet</label>
+                    <input type="text" name="nom_client" placeholder="Votre Nom" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" />
+                </div>
+                <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Téléphone</label>
+                    <input type="tel" name="telephone" placeholder="06 12 34 56 78" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" />
+                </div>
+              </div>
+              
+              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Email</label><input type="email" name="user_email" placeholder="votre@email.com" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
+              
+              {/* === NOUVEAU CHAMP : INFOS SPÉCIFIQUES === */}
+              <div>
+                <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Information Spécifique (Optionnel)</label>
+                <textarea 
+                  name="details" 
+                  placeholder="Siège bébé, animal, bagages volumineux, code porte..." 
+                  className="w-full h-20 border border-slate-300 rounded-sm px-3 py-2 text-sm font-medium focus:border-blue-600 outline-none resize-none"
+                ></textarea>
+              </div>
 
-        {/* TITRE TARIFS */}
+              <div className="pt-2"><button type="submit" disabled={isSending} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-12 rounded-sm uppercase tracking-wide text-sm shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]">{isSending ? (<>Envoi en cours...</>) : (<><Send className="w-4 h-4" /> Envoyer la demande</>)}</button><p className="text-[10px] text-center text-slate-400 mt-2">Paiement sécurisé à bord ou sur facture.</p></div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 w-full pb-16 animate-fade-in delay-200">
+        
+        {/* === 3. TITRE TARIFS (JUSTE APRES LE FORM) === */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-black text-slate-900 uppercase mb-4">Nos Tarifs Premium</h2>
           <div className="w-20 h-1 bg-blue-700 mx-auto"></div>
@@ -247,8 +327,8 @@ export default function VTCPage() {
           </p>
         </div>
 
-        {/* GRILLE TARIFS (COPIE DU CODE VALIDÉ) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {/* GRILLE TARIFS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           {/* ORLY */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
             <div className="h-32 bg-blue-900 relative overflow-hidden">
@@ -275,10 +355,10 @@ export default function VTCPage() {
             </div>
           </div>
 
-          {/* PARIS */}
+          {/* PARIS (IMAGE CORRIGÉE) */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:-translate-y-1 transition duration-300">
             <div className="h-32 bg-blue-900 relative overflow-hidden">
-               <img src="https://images.unsplash.com/photo-1558284422-b2f7034c7c59?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Paris Gare" referrerPolicy="no-referrer" />
+               <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Paris" referrerPolicy="no-referrer" />
                <div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">PARIS</h3><Train className="w-6 h-6" /></div>
             </div>
             <div className="p-6 space-y-4">
@@ -288,10 +368,10 @@ export default function VTCPage() {
             </div>
           </div>
 
-          {/* BEAUVAIS */}
+          {/* BEAUVAIS (IMAGE CORRIGÉE) */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:-translate-y-1 transition duration-300">
             <div className="h-32 bg-slate-800 relative overflow-hidden">
-               <img src="https://images.unsplash.com/photo-1556382363-8967ac2b3543?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Beauvais" referrerPolicy="no-referrer" />
+               <img src="https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?q=80&w=800" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Beauvais" referrerPolicy="no-referrer" />
                <div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">BEAUVAIS</h3><Plane className="w-6 h-6" /></div>
             </div>
             <div className="p-6 space-y-4">
@@ -326,41 +406,47 @@ export default function VTCPage() {
             <div className="mt-6 text-[11px] text-slate-500 italic bg-slate-50 p-4 rounded border border-slate-100">Attente retard avion/train : gratuite jusqu'à 35min, puis 30€/heure.</div>
           </div>
         </div>
-      </div>
 
-      {/* FORMULAIRE (Conserved) */}
-      <div id="booking" className="relative z-20 px-4 max-w-5xl mx-auto w-full mb-20 animate-fade-in delay-200">
-        <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
-          <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
-            <div className="flex items-center gap-3"><Calendar className="w-6 h-6 text-blue-500" /><div><h3 className="text-lg font-black uppercase">Demande de Réservation</h3><p className="text-xs text-slate-400">Confirmation de disponibilité sous 1h.</p></div></div>
-            <div className="hidden md:block text-right"><div className="text-[10px] uppercase font-bold text-slate-500">Besoin d'aide ?</div><div className="font-mono font-bold text-lg">06 34 60 57 99</div></div>
+        {/* === 4. SECTION PRO & ENTREPRISES (DESCENDUE EN BAS) === */}
+        <div className="mb-8 bg-slate-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
+          <div className="relative z-10 grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <span className="text-blue-400 font-bold tracking-widest text-xs uppercase mb-2 block">Service B2B</span>
+              <h2 className="text-3xl font-black uppercase mb-4">Professionnels & Entreprises</h2>
+              <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                Mapetrans.LD est le partenaire privilégié des entreprises du Loiret pour la gestion des déplacements collaborateurs et VIP. Solutions sur mesure adaptées à vos besoins réguliers.
+              </p>
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle className="w-5 h-5 text-blue-500"/> Facturation mensuelle fin de mois</li>
+                <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle className="w-5 h-5 text-blue-500"/> Navettes régulières (Matin/Soir)</li>
+                <li className="flex items-center gap-3 text-sm font-medium"><CheckCircle className="w-5 h-5 text-blue-500"/> Priorité de réservation & Ligne dédiée</li>
+              </ul>
+              <div className="mt-8">
+                <button onClick={() => setIsCallbackModalOpen(true)} className="inline-flex items-center gap-2 text-blue-400 font-bold uppercase text-xs hover:text-white transition group">
+                  Demander à être rappelé <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform"/>
+                </button>
+              </div>
+            </div>
+            <div className="bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-sm">
+              <Briefcase className="w-10 h-10 text-blue-500 mb-4" />
+              <h3 className="text-xl font-bold mb-2">Navettes Salariés</h3>
+              <p className="text-xs text-slate-400 mb-6">
+                Mise en place de lignes régulières pour le transport de vos équipes entre la gare d'Orléans/Fleury et vos bureaux.
+              </p>
+              <div className="h-px w-full bg-white/10 mb-6"></div>
+              <Building2 className="w-10 h-10 text-blue-500 mb-4" />
+              <h3 className="text-xl font-bold mb-2">Événementiel</h3>
+              <p className="text-xs text-slate-400">
+                Gestion logistique complète pour vos séminaires, congrès et visites de sites industriels.
+              </p>
+            </div>
           </div>
-          <form ref={form} onSubmit={sendEmail} className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <div className="space-y-5">
-              <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2"><MapPin className="w-4 h-4"/> Détails du trajet</h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date</label><input type="date" name="date" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure</label><input type="time" name="time" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
-              </div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse de Départ</label><input type="text" name="depart" placeholder="Ex: 10 rue de la République, Orléans" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Destination</label><input type="text" name="destination" placeholder="Ex: Aéroport Orly Terminal 2..." required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° de Vol / Train (Optionnel)</label><div className="relative"><Plane className="w-4 h-4 text-slate-400 absolute left-3 top-3" /><input type="text" name="vol_train" placeholder="Ex: AF1234 ou TGV 8540" className="w-full h-10 border border-slate-300 rounded-sm pl-9 pr-3 text-sm font-medium focus:border-blue-600 outline-none" /></div></div>
-            </div>
-            <div className="space-y-5">
-              <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2"><User className="w-4 h-4"/> Passagers & Contact</h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nb Passagers</label><select name="passagers" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white"><option value="1">1 personne</option><option value="2">2 personnes</option><option value="3">3 personnes</option><option value="4">4 personnes</option><option value="5-8">5 à 8 personnes</option></select></div>
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Véhicule</label><select name="vehicule" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white"><option value="Berline">Berline Confort</option><option value="Van">Van (Groupe/Bagages)</option></select></div>
-              </div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Vos Coordonnées</label><input type="text" name="user_name" placeholder="Nom complet + Téléphone" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Email</label><input type="email" name="user_email" placeholder="votre@email.com" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div className="pt-2"><button type="submit" disabled={isSending} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold h-12 rounded-sm uppercase tracking-wide text-sm shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]">{isSending ? (<>Envoi en cours...</>) : (<><Send className="w-4 h-4" /> Envoyer la demande</>)}</button><p className="text-[10px] text-center text-slate-400 mt-2">Paiement sécurisé à bord ou sur facture.</p></div>
-            </div>
-          </form>
         </div>
+
       </div>
 
-      {/* FOOTER (COPIE CONFORME ACCUEIL) */}
+      {/* FOOTER (UNCHANGED) */}
       <footer className="mt-auto">
         <div className="bg-blue-700 text-white py-8 px-6">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
@@ -368,7 +454,6 @@ export default function VTCPage() {
               <span className="text-lg font-bold">Une demande précise ? Des conditions particulières ?</span>
               <span className="text-blue-100 text-sm mt-1">Contactez-nous dès maintenant, réponse immédiate garantie.</span>
             </div>
-            {/* CORRECTION : Activation de l'appel téléphonique */}
             <a href="tel:0634605799" className="bg-slate-900 text-white px-8 py-3 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-black transition shadow-lg border border-transparent hover:border-slate-700">
               <Phone className="w-4 h-4 inline mr-2"/> CONTACT RAPIDE
             </a>

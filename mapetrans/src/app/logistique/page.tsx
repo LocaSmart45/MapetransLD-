@@ -1,22 +1,11 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
-import { ArrowRight, CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, Globe, ArrowUpRight, Package, Scale, Ruler, Factory, Send, Info, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, ArrowUpRight, ShieldCheck, Zap, FileText } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LogistiquePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSending, setIsSending] = useState(false);
-  const form = useRef<HTMLFormElement>(null);
-
-  const sendEmail = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSending(true);
-    setTimeout(() => {
-        alert("✅ Demande de cotation envoyée ! Notre service exploitation vous répond sous 30 min.");
-        setIsSending(false);
-    }, 1500);
-  };
 
   return (
     <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[120px] flex flex-col">
@@ -89,15 +78,11 @@ export default function LogistiquePage() {
               <div className="hidden xl:flex items-center gap-6 pl-6">
                 <div className="flex flex-col items-end text-right">
                   <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Service Exploitation</span>
-                  <a
-  href="tel:0634605799"
-  className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono whitespace-nowrap"
->
-  06 34 60 57 99
-</a>
-
+                  <a href="tel:0634605799" className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono whitespace-nowrap">
+                    06 34 60 57 99
+                  </a>
                 </div>
-                <Link href="#cotation" className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-sm font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase">
+                <Link href="#contact-hub" className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-sm font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase">
                   Demande de Cotation
                 </Link>
               </div>
@@ -121,7 +106,7 @@ export default function LogistiquePage() {
         )}
       </header>
 
-      {/* === HERO LOGISTIQUE (Image corrigée) === */}
+      {/* === HERO LOGISTIQUE === */}
       <div className="relative h-[450px] w-full overflow-hidden flex items-center justify-center bg-slate-900">
         <img 
           src="https://images.pexels.com/photos/4506245/pexels-photo-4506245.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
@@ -142,64 +127,47 @@ export default function LogistiquePage() {
             Solution dédiée pour industriels, e-commerçants et artisans.
           </p>
           <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center items-center">
-            <Link href="#cotation" className="bg-blue-600 text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-blue-700 transition shadow-lg inline-flex items-center gap-2 transform hover:scale-105 duration-300">
+            <Link href="#contact-hub" className="bg-blue-600 text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-blue-700 transition shadow-lg inline-flex items-center gap-2 transform hover:scale-105 duration-300">
               <Truck className="w-4 h-4"/> Obtenir une cotation
             </Link>
           </div>
         </div>
       </div>
 
-      {/* === FORMULAIRE DE COTATION === */}
-      <div id="cotation" className="relative z-20 -mt-10 px-4 max-w-5xl mx-auto w-full mb-20 animate-fade-in delay-100">
-        <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
-          <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
-            <div className="flex items-center gap-3">
-              <Truck className="w-6 h-6 text-blue-500" />
-              <div>
-                <h3 className="text-lg font-black uppercase">Demande de Cotation Express</h3>
-                <p className="text-xs text-slate-400">Réponse de l'exploitation sous 30 minutes.</p>
-              </div>
-            </div>
-            <div className="hidden md:block text-right">
-              <div className="text-[10px] uppercase font-bold text-slate-500">Service Exploitation</div>
-              <div className="font-mono font-bold text-lg">06 34 60 57 99</div>
-            </div>
-          </div>
-
-          <form ref={form} onSubmit={sendEmail} className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <div className="space-y-5">
-              <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2">
-                <MapPin className="w-4 h-4"/> Expédition
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date d'enlèvement</label><input type="date" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date de livraison</label><input type="date" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
-              </div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ville d'Enlèvement (CP)</label><input type="text" placeholder="Ex: 45000 Orléans" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ville de Livraison (CP)</label><input type="text" placeholder="Ex: 75001 Paris" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div className="bg-slate-50 p-3 rounded border border-slate-100">
-                <label className="flex items-center gap-3 text-xs font-bold text-slate-700 cursor-pointer">
-                  <input type="checkbox" className="w-4 h-4 text-blue-600 rounded" /> Besoin de hayon élévateur ?
-                </label>
-              </div>
+      {/* === REMPLACEMENT DU FORMULAIRE : LE HUB DE CONTACT RAPIDE === */}
+      <div id="contact-hub" className="relative z-20 -mt-10 px-4 max-w-5xl mx-auto w-full mb-20 animate-fade-in delay-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            
+            {/* OPTION 1 : L'URGENCE (TÉLÉPHONE) */}
+            <div className="bg-slate-900 rounded-xl shadow-2xl overflow-hidden flex flex-col p-8 md:p-10 text-center items-center hover:scale-[1.01] transition duration-300 border border-slate-700">
+                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-6 shadow-lg shadow-red-900/50 animate-pulse">
+                    <Zap className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-black text-white uppercase mb-2">J'ai une Urgence</h3>
+                <p className="text-slate-400 text-sm mb-8 max-w-xs mx-auto">
+                    Départ immédiat, rupture de chaîne, impératif horaire ? Passez en priorité sur notre ligne exploitation.
+                </p>
+                <a href="tel:0634605799" className="w-full bg-white text-slate-900 font-black h-14 rounded-sm uppercase tracking-wide text-sm shadow-xl hover:bg-slate-100 transition flex items-center justify-center gap-3">
+                    <Phone className="w-5 h-5 text-red-600" /> Appeler le 06 34 60 57 99
+                </a>
+                <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-4">Réponse immédiate 24/7</span>
             </div>
 
-            <div className="space-y-5">
-              <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2">
-                <Package className="w-4 h-4"/> Marchandise & Contact
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Conditionnement</label><select className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white"><option>Palettes Europe (80x120)</option><option>Palettes US (100x120)</option><option>Colis / Vrac</option><option>Grandes Longueurs</option></select></div>
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Quantité / Métrage</label><input type="text" placeholder="Ex: 3 palettes" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Poids (kg)</label><input type="text" placeholder="Ex: 1200" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Société</label><input type="text" placeholder="Nom de l'entreprise" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              </div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Email & Téléphone</label><input type="text" placeholder="Contact direct" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div className="pt-2"><button type="submit" disabled={isSending} className="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold h-12 rounded-sm uppercase tracking-wide text-sm shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 hover:scale-[1.02] active:scale-[0.98]">{isSending ? (<>Envoi en cours...</>) : (<><Send className="w-4 h-4" /> Demander le tarif</>)}</button></div>
+            {/* OPTION 2 : L'ÉTUDE (EMAIL) */}
+            <div className="bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col p-8 md:p-10 text-center items-center hover:scale-[1.01] transition duration-300 border border-slate-100">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                    <FileText className="w-8 h-8 text-blue-700" />
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 uppercase mb-2">Demande de Cotation</h3>
+                <p className="text-slate-500 text-sm mb-8 max-w-xs mx-auto">
+                    Pour vos transports planifiés, appels d'offres ou affrètement régulier. Réponse sous 30 minutes.
+                </p>
+                <a href="mailto:contact@mapetransld.com?subject=Demande de Cotation Transport" className="w-full bg-blue-700 text-white font-black h-14 rounded-sm uppercase tracking-wide text-sm shadow-xl hover:bg-blue-800 transition flex items-center justify-center gap-3">
+                    <Mail className="w-5 h-5" /> Envoyer un Email
+                </a>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4">contact@mapetransld.com</span>
             </div>
-          </form>
+
         </div>
       </div>
 
@@ -244,7 +212,7 @@ export default function LogistiquePage() {
               <p className="text-[11px] text-slate-500 mb-3">Standard du déménagement et de la livraison palette dédiée.</p>
               <div className="space-y-1 border-t border-slate-100 pt-3">
                 <div className="flex justify-between text-xs"><span className="text-slate-500">Capacité</span><span className="font-bold text-slate-800">8 Palettes</span></div>
-                <div className="flex justify-between text-xs"><span className="text-slate-500">Hayon</span><span className="font-bold text-green-600">Oui</span></div>
+                <div className="flex justify-between text-xs"><span className="text-slate-500">Hayon</span><span className="font-bold text-black-600">Oui</span></div>
               </div>
             </div>
           </div>
@@ -320,7 +288,6 @@ export default function LogistiquePage() {
               <span className="text-lg font-bold">Un transport urgent à organiser ?</span>
               <span className="text-blue-100 text-sm mt-1">Nos exploitants trouvent une solution immédiatement.</span>
             </div>
-            {/* CORRECTION : Activation de l'appel téléphonique */}
             <a href="tel:0634605799" className="bg-slate-900 text-white px-8 py-3 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-black transition shadow-lg border border-transparent hover:border-slate-700">
               <Phone className="w-4 h-4 inline mr-2"/> DEMANDER UN PRIX
             </a>
