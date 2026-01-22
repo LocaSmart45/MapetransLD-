@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { ArrowRight, CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, Globe, ArrowUpRight, Star, Moon, Calendar, Info, Briefcase, Plane, User, Send, Loader2, Train, PhoneCall } from 'lucide-react';
+import { ArrowRight, CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, Globe, ArrowUpRight, Star, Moon, Calendar, Info, Briefcase, Plane, User, Send, Loader2, Train, PhoneCall, Repeat } from 'lucide-react';
 import Link from 'next/link';
 
-// === FONCTION HELPER (Doit être après les imports) ===
+// === FONCTION HELPER ===
 async function postLead(payload: any) {
   const res = await fetch("/api/leads", {
     method: "POST",
@@ -20,6 +20,10 @@ export default function VTCPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  
+  // === NOUVEAU STATE POUR L'ALLER-RETOUR ===
+  const [isRoundTrip, setIsRoundTrip] = useState(false);
+  
   const form = useRef<HTMLFormElement>(null);
 
   // === Envoi via SheetMonkey ===
@@ -32,18 +36,22 @@ export default function VTCPage() {
 
     const data = {
       "Date Demande": new Date().toLocaleString("fr-FR"),
-      "Date Trajet": fd.get("date"),
-      "Heure D'Arrivée Prévue": fd.get("time"),
+      "Type Trajet": isRoundTrip ? "Aller-Retour" : "Aller Simple", // Info pour Excel
+      "Date Aller": fd.get("date"),
+      "Heure Aller": fd.get("time"),
+      "Date Retour": isRoundTrip ? fd.get("date_retour") : "N/A", // Nouveau champ
+      "Heure Retour": isRoundTrip ? fd.get("time_retour") : "N/A", // Nouveau champ
+      "Vol/Train Retour": isRoundTrip ? fd.get("vol_train_retour") : "N/A", // Nouveau champ
       "Départ": fd.get("depart"),
       "Destination": fd.get("destination"),
-      "Vol/Train": fd.get("vol_train"),
+      "Vol/Train Aller": fd.get("vol_train"),
       "Nb Passagers": fd.get("passagers"),
       "Véhicule": fd.get("vehicule"),
       "Nom Client": fd.get("nom_client"),
       "Téléphone": fd.get("telephone"),
       "Email": fd.get("user_email"),
       "Informations Spécifiques": fd.get("details"),
-      "Type": "Réservation VTC"
+      "Type Service": "Réservation VTC"
     };
 
     try {
@@ -54,8 +62,9 @@ export default function VTCPage() {
       });
 
       if (response.ok) {
-        alert("✅ Demande envoyée avec succès ! Nous vous confirmons la disponibilité sous 1h.");
+        alert("✅ Demande envoyée avec succès ! Nous vous confirmons la disponibilité sous 24H.");
         formEl.reset();
+        setIsRoundTrip(false); // On remet à zéro
       } else {
         alert("❌ Erreur lors de l'envoi.");
       }
@@ -264,19 +273,43 @@ export default function VTCPage() {
       <div id="booking" className="relative z-20 px-4 max-w-5xl mx-auto w-full -mt-0 mt-12 mb-20 animate-fade-in delay-100">
         <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
           <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
-            <div className="flex items-center gap-3"><Calendar className="w-6 h-6 text-blue-500" /><div><h3 className="text-lg font-black uppercase">Demande de Réservation</h3><p className="text-xs text-slate-400">Confirmation de disponibilité sous 1h.</p></div></div>
+            <div className="flex items-center gap-3"><Calendar className="w-6 h-6 text-blue-500" /><div><h3 className="text-lg font-black uppercase">Demande de Réservation</h3><p className="text-xs text-slate-400">Confirmation de disponibilité sous 24H.</p></div></div>
             <div className="hidden md:block text-right"><div className="text-[10px] uppercase font-bold text-slate-500">Besoin d'aide ?</div><div className="font-mono font-bold text-lg">06 34 60 57 99</div></div>
           </div>
           <form ref={form} onSubmit={sendEmail} className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <div className="space-y-5">
               <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2"><MapPin className="w-4 h-4"/> Détails du trajet</h4>
+              
+              {/* DATE ET HEURE ALLER */}
               <div className="grid grid-cols-2 gap-4">
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date</label><input type="date" name="date" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
-                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure de Vol/Train</label><input type="time" name="time" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
+                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date Aller</label><input type="date" name="date" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
+                <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure Aller</label><input type="time" name="time" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
               </div>
+
+              {/* BOUTON ALLER RETOUR */}
+              <div className="flex items-center gap-3">
+                <button 
+                    type="button" 
+                    onClick={() => setIsRoundTrip(!isRoundTrip)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-bold uppercase transition border ${isRoundTrip ? 'bg-blue-600 text-white border-blue-600' : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'}`}
+                >
+                    <Repeat className="w-3 h-3" /> {isRoundTrip ? 'Aller-Retour activé' : 'Ajouter un Retour'}
+                </button>
+              </div>
+
+              {/* CHAMPS CACHÉS SI PAS D'ALLER RETOUR */}
+              {isRoundTrip && (
+                  <div className="grid grid-cols-2 gap-4 p-4 bg-blue-50 border border-blue-100 rounded animate-fade-in">
+                    <div className="col-span-2 text-xs font-bold text-blue-800 uppercase mb-1">Information Retour</div>
+                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date Retour</label><input type="date" name="date_retour" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
+                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure Retour</label><input type="time" name="time_retour" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
+                    <div className="col-span-2"><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° Vol/Train Retour (Optionnel)</label><input type="text" name="vol_train_retour" placeholder="Ex: AF9999" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
+                  </div>
+              )}
+
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse de Départ</label><input type="text" name="depart" placeholder="Ex: 10 rue de la République, Orléans" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Destination</label><input type="text" name="destination" placeholder="Ex: Aéroport Orly Terminal 2..." required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° de Vol / Train (Optionnel)</label><div className="relative"><Plane className="w-4 h-4 text-slate-400 absolute left-3 top-3" /><input type="text" name="vol_train" placeholder="Ex: AF1234 ou TGV 8540" className="w-full h-10 border border-slate-300 rounded-sm pl-9 pr-3 text-sm font-medium focus:border-blue-600 outline-none" /></div></div>
+              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° de Vol / Train Aller (Optionnel)</label><div className="relative"><Plane className="w-4 h-4 text-slate-400 absolute left-3 top-3" /><input type="text" name="vol_train" placeholder="Ex: AF1234 ou TGV 8540" className="w-full h-10 border border-slate-300 rounded-sm pl-9 pr-3 text-sm font-medium focus:border-blue-600 outline-none" /></div></div>
             </div>
             
             <div className="space-y-5">
@@ -299,7 +332,6 @@ export default function VTCPage() {
               
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Email</label><input type="email" name="user_email" placeholder="votre@email.com" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
               
-              {/* === NOUVEAU CHAMP : INFOS SPÉCIFIQUES === */}
               <div>
                 <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Information Spécifique (Optionnel)</label>
                 <textarea 
@@ -355,7 +387,7 @@ export default function VTCPage() {
             </div>
           </div>
 
-          {/* PARIS (IMAGE CORRIGÉE) */}
+          {/* PARIS */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:-translate-y-1 transition duration-300">
             <div className="h-32 bg-blue-900 relative overflow-hidden">
                <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Paris" referrerPolicy="no-referrer" />
@@ -368,7 +400,7 @@ export default function VTCPage() {
             </div>
           </div>
 
-          {/* BEAUVAIS (IMAGE CORRIGÉE) */}
+          {/* BEAUVAIS */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:-translate-y-1 transition duration-300">
             <div className="h-32 bg-slate-800 relative overflow-hidden">
                <img src="https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?q=80&w=800" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Beauvais" referrerPolicy="no-referrer" />
