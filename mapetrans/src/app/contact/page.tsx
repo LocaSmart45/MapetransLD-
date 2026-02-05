@@ -180,7 +180,7 @@ export default function ContactPage() {
                         <div>
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Siège Social</p>
                             <p className="text-lg font-bold text-slate-900 leading-snug">
-                                2C Rue des Vergers,<br/> 45400 Fleury Les Aubrais
+                                105 Route Nationale 20,<br/> 45520 Cercottes
                             </p>
                             <p className="text-xs text-slate-500 mt-2 italic">Uniquement sur rendez-vous.</p>
                         </div>
