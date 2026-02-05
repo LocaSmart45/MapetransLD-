@@ -9,22 +9,22 @@ const nextConfig: NextConfig = {
       // --- 1. CONTACT & RÉSERVATION ---
       {
         source: '/page/contact-pour-des-navettes-aeroports-et-transport-de-marchandises/',
-        destination: '/contact',
+        destination: '/vtc',
         permanent: true,
       },
       {
         source: '/page/contact-pour-des-navettes-aeroports-et-transport-de-marchandises',
-        destination: '/contact',
+        destination: '/vtc',
         permanent: true,
       },
       {
         source: '/page/reservation-navette-aeroport-orleans-transport-de-marchandises/',
-        destination: '/contact',
+        destination: '/vtc',
         permanent: true,
       },
       {
         source: '/page/reservation-navette-aeroport-orleans-transport-de-marchandises',
-        destination: '/contact',
+        destination: '/vtc',
         permanent: true,
       },
 
@@ -192,12 +192,12 @@ const nextConfig: NextConfig = {
       // --- 7. HOME / AUTRES ---
       {
         source: '/page/mapetrans-ld-navette-aeroport-orleans-et-transport-express/',
-        destination: '/',
+        destination: '/vtc',
         permanent: true,
       },
       {
         source: '/page/mapetrans-ld-navette-aeroport-orleans-et-transport-express',
-        destination: '/',
+        destination: '/vtc',
         permanent: true,
       },
       {
