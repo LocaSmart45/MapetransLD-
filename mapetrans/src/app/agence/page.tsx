@@ -266,8 +266,8 @@ export default function AgencePage() {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 uppercase tracking-wide gap-4">
             <span>Copyright 2025, Mapetrans LD. Tous droits réservés.</span>
             <div className="flex gap-6">
-              <Link href="#" className="hover:text-slate-400 transition">Mentions Légales</Link>
-              <Link href="#" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
+              <Link href="/mentions-legales" className="hover:text-slate-400 transition">Mentions Légales</Link>
+              <Link href="/confidentialité" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
             </div>
           </div>
         </div>

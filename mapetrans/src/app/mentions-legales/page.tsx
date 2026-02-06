@@ -135,7 +135,7 @@ export default function MentionsLegalesPage() {
           <span>Copyright 2025, Mapetrans LD. Tous droits réservés.</span>
           <div className="flex gap-6">
             <Link href="/mentions-legales" className="hover:text-slate-400 transition text-white">Mentions Légales</Link>
-            <Link href="/politique-confidentialite" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
+            <Link href="/confidentialitz" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
           </div>
         </div>
       </footer>

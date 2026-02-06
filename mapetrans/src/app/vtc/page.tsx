@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { ArrowRight, CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, Globe, ArrowUpRight, Star, Moon, Calendar, Info, Briefcase, Plane, User, Send, Loader2, Train, PhoneCall, Repeat } from 'lucide-react';
+import { ArrowRight, CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, Globe, ArrowUpRight, Star, Moon, Calendar, Info, Briefcase, Plane, User, Send, Loader2, Train, PhoneCall, Repeat, ChevronDown, CreditCard, Zap } from 'lucide-react';
 import Link from 'next/link';
 
 // ============================================================
@@ -27,12 +27,10 @@ export default function VTCPage() {
   const [isSending, setIsSending] = useState(false);
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
   
-  // === STATE POUR L'ALLER-RETOUR ===
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   
   const form = useRef<HTMLFormElement>(null);
 
-  // === ENVOI DU FORMULAIRE (Vers Make) ===
   const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     const formEl = e.currentTarget as HTMLFormElement;
@@ -40,46 +38,33 @@ export default function VTCPage() {
 
     setIsSending(true);
 
-    // LOGIQUE AUTOMATIQUE VÉHICULE
-    // Si 4 passagers ou +, c'est un Van. Sinon Berline.
     const nbPassagers = fd.get("passagers");
     const vehiculeAuto = parseInt(String(nbPassagers)) >= 4 ? "Van" : "Berline";
 
-    // Préparation des données pour Excel
     const data = {
       "Date Demande": new Date().toLocaleString("fr-FR"),
       "Type Trajet": isRoundTrip ? "Aller-Retour" : "Aller Simple",
-      
-      // INFOS CLIENT
       "Nom": fd.get("nom"),
       "Prénom": fd.get("prenom"),
       "Adresse Facturation": fd.get("adresse_facturation"),
       "Téléphone": fd.get("telephone"),
       "Email": fd.get("user_email"),
-      
-      // TRAJET ALLER
       "Date Aller": fd.get("date"),
       "Heure Vol/Train Aller": fd.get("time"), 
       "Départ Aller": fd.get("depart"),
       "Destination Aller": fd.get("destination"),
       "N° Vol/Train Aller": fd.get("vol_train"),
-      
-      // TRAJET RETOUR (Si activé)
       "Date Retour": isRoundTrip ? fd.get("date_retour") : "", 
       "Heure Vol/Train Retour": isRoundTrip ? fd.get("time_retour") : "",
       "N° Vol/Train Retour": isRoundTrip ? fd.get("vol_train_retour") : "",
       "Adresse Dépose Retour": isRoundTrip ? fd.get("destination_retour") : "",
-      
-      // INFOS COMPLÉMENTAIRES
       "Nb Passagers": nbPassagers,
       "Véhicule": vehiculeAuto,
       "Infos Spécifiques": fd.get("details"),
-      
-      "Statut": "À TRAITER" // Statut par défaut dans Excel
+      "Statut": "À TRAITER"
     };
 
     try {
-      // Envoi vers le Webhook Make
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,7 +87,6 @@ export default function VTCPage() {
     }
   };
 
-  // Envoi demande de rappel PRO
   const handleCallbackRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     const formEl = e.currentTarget as HTMLFormElement;
@@ -146,7 +130,7 @@ export default function VTCPage() {
          <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(to_right,#000_1px,transparent_1px)] bg-[size:40px_40px]"></div>
       </div>
 
-      {/* === FENÊTRE MODALE DE RAPPEL (POP-UP) === */}
+      {/* === FENÊTRE MODALE DE RAPPEL === */}
       {isCallbackModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden relative">
@@ -180,7 +164,6 @@ export default function VTCPage() {
         <nav className="border-b border-slate-200 h-20 md:h-24 flex items-center relative bg-white z-50">
           <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
             
-            {/* LOGO TEXTE */}
             <div className="flex flex-col leading-none cursor-pointer group pr-2">
               <Link href="/">
                 <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
@@ -222,23 +205,29 @@ export default function VTCPage() {
         )}
       </header>
 
-      {/* === 1. HERO VTC === */}
+      {/* === 1. HERO VTC (TEXTES MODIFIÉS POUR SEO EXPRESS) === */}
       <div className="relative h-[450px] w-full overflow-hidden flex items-center justify-center bg-slate-900">
-        <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop" alt="Chauffeur VTC" className="absolute inset-0 w-full h-full object-cover animate-fade-in" />
+        <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop" alt="Chauffeur VTC et Transport Express Orléans" className="absolute inset-0 w-full h-full object-cover animate-fade-in" />
         <div className="absolute inset-0 bg-slate-900/70"></div>
         <div className="relative z-10 text-center px-4 animate-fade-in">
-          <span className="inline-block py-1 px-3 border border-white/30 rounded-full text-[10px] font-bold text-white uppercase tracking-widest mb-4 bg-white/10 backdrop-blur-sm">Tarifs 2025 - 2026</span>
-          <h1 className="text-3xl md:text-6xl font-black text-white uppercase tracking-tight mb-6 drop-shadow-lg">Votre Chauffeur VTC <br/> <span className="text-blue-500">Orléans & Île-de-France</span></h1>
-          <p className="text-slate-200 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">Spécialiste des navettes aéroports (Orly, Roissy, Beauvais) et transferts gares. <br/> Alternative Taxi haut de gamme, tarifs fixes et service de véhicule privatif non partagé.</p>
+          <span className="inline-block py-1 px-3 border border-white/30 rounded-full text-[10px] font-bold text-white uppercase tracking-widest mb-4 bg-white/10 backdrop-blur-sm">Aéroport • Gares • Urgences</span>
+          <h1 className="text-3xl md:text-6xl font-black text-white uppercase tracking-tight mb-6 drop-shadow-lg">
+             Navette VTC & <br/> <span className="text-blue-500">Service de Transport Prioritaire</span>
+          </h1>
+          {/* TEXTE CORRIGÉ : EXPRESS & SANS RESTRICTION */}
+          <p className="text-slate-200 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
+            Alternative Taxi pour vos navettes aéroports (Orly, Roissy), gares et <strong>courses express</strong>. <br/>
+            Service disponible 24h/7j pour tous vos trajets, sans restriction de distance.
+          </p>
           <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center items-center">
-            <a href="tel:0634605799" className="bg-white text-slate-900 px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-slate-100 transition shadow-lg inline-flex items-center gap-2 transform hover:scale-105 duration-300"><Phone className="w-4 h-4"/> Une demande particulière ?</a>
+            <a href="tel:0634605799" className="bg-white text-slate-900 px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-slate-100 transition shadow-lg inline-flex items-center gap-2 transform hover:scale-105 duration-300"><Phone className="w-4 h-4"/> Appeler (Urgence)</a>
             <span className="text-white text-xs font-medium opacity-80 md:hidden">ou</span>
             <Link href="#booking" className="bg-blue-600 text-white px-8 py-4 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-blue-700 transition shadow-lg inline-flex items-center gap-2"><Calendar className="w-4 h-4"/> Réserver une navette</Link>
           </div>
         </div>
       </div>
 
-      {/* === 2. FORMULAIRE === */}
+      {/* === 2. FORMULAIRE (INTACT) === */}
       <div id="booking" className="relative z-20 px-4 max-w-5xl mx-auto w-full -mt-0 mt-12 mb-20 animate-fade-in delay-100">
         <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
           <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
@@ -249,34 +238,30 @@ export default function VTCPage() {
             <div className="space-y-5">
               <h4 className="text-sm font-black text-blue-800 uppercase border-b border-slate-100 pb-2 flex items-center gap-2"><MapPin className="w-4 h-4"/> Détails du trajet</h4>
               
-              {/* DATE ET HEURE ALLER */}
               <div className="grid grid-cols-2 gap-4">
                 <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date Aller</label><input type="date" name="date" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
                 <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure de Vol/Train</label><input type="time" name="time" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-slate-50" /></div>
               </div>
 
-              {/* BOUTON ALLER RETOUR */}
               <div className="flex items-center gap-3">
                 <button type="button" onClick={() => setIsRoundTrip(!isRoundTrip)} className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-bold uppercase transition border ${isRoundTrip ? 'bg-blue-600 text-white border-blue-600' : 'bg-slate-100 text-slate-500 border-slate-200 hover:bg-slate-200'}`}>
                     <Repeat className="w-3 h-3" /> {isRoundTrip ? 'Aller-Retour activé' : 'Ajouter un Retour'}
                 </button>
               </div>
 
-              {/* CHAMPS CACHÉS SI PAS D'ALLER RETOUR */}
               {isRoundTrip && (
                   <div className="grid grid-cols-2 gap-4 p-4 bg-blue-50 border border-blue-100 rounded animate-fade-in">
                     <div className="col-span-2 text-xs font-bold text-blue-800 uppercase mb-1">Information Retour</div>
                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Date Retour</label><input type="date" name="date_retour" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Heure d'Arrivée Prévue .</label><input type="time" name="time_retour" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
                     
-                    {/* ADRESSE DE DÉPOSE RETOUR */}
                     <div className="col-span-2"><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse Dépose Retour (Si différente départ)</label><input type="text" name="destination_retour" placeholder="Laisser vide si retour au point de départ" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
                     
                     <div className="col-span-2"><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° Vol/Train Retour </label><input type="text" name="vol_train_retour" placeholder="Ex: AF9999" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" /></div>
                   </div>
               )}
 
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse de Départ</label><input type="text" name="depart" placeholder="Ex: 10 rue de la République, Orléans" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
+              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse de Départ</label><input type="text" name="depart" placeholder="Ex: Saran, Olivet, Orléans..." required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Destination</label><input type="text" name="destination" placeholder="Ex: Aéroport Orly Terminal 2..." required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° de Vol / Train Aller </label><div className="relative"><Plane className="w-4 h-4 text-slate-400 absolute left-3 top-3" /><input type="text" name="vol_train" placeholder="Ex: AF1234 ou TGV 8540" className="w-full h-10 border border-slate-300 rounded-sm pl-9 pr-3 text-sm font-medium focus:border-blue-600 outline-none" /></div></div>
             </div>
@@ -309,12 +294,12 @@ export default function VTCPage() {
       <div className="max-w-7xl mx-auto px-4 w-full pb-16 animate-fade-in delay-200">
         {/* TITRE TARIFS */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-black text-slate-900 uppercase mb-4">Nos Tarifs Premium</h2>
+          <h2 className="text-3xl font-black text-slate-900 uppercase mb-4">Nos Forfaits Aéroports</h2>
           <div className="w-20 h-1 bg-blue-700 mx-auto"></div>
-          <p className="text-slate-500 text-sm mt-4 max-w-xl mx-auto">Des prix fixes au départ d'Orléans. <br/><strong>Pas de partage :</strong> le véhicule est 100% réservé pour vous.</p>
+          <p className="text-slate-500 text-sm mt-4 max-w-xl mx-auto">Des prix fixes pour vos départs et arrivées. <br/><strong>Transfert privé :</strong> le véhicule est 100% réservé pour vous.</p>
         </div>
 
-        {/* GRILLE TARIFS */}
+        {/* GRILLE TARIFS (INTACTE) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
           {/* ORLY */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
@@ -374,8 +359,8 @@ export default function VTCPage() {
           </div>
         </div>
 
-        {/* === 4. SECTION PRO & ENTREPRISES (DESCENDUE EN BAS) === */}
-        <div className="mb-8 bg-slate-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden">
+        {/* === 4. SECTION PRO & ENTREPRISES (INTACTE) === */}
+        <div className="mb-12 bg-slate-900 text-white rounded-2xl p-8 md:p-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
           <div className="relative z-10 grid md:grid-cols-2 gap-10 items-center">
             <div>
@@ -394,7 +379,7 @@ export default function VTCPage() {
             <div className="bg-white/5 rounded-xl p-6 border border-white/10 backdrop-blur-sm">
               <Briefcase className="w-10 h-10 text-blue-500 mb-4" />
               <h3 className="text-xl font-bold mb-2">Navettes Salariés</h3>
-              <p className="text-xs text-slate-400 mb-6">Mise en place de lignes régulières pour le transport de vos équipes entre la gare d'Orléans/Fleury et vos bureaux.</p>
+              <p className="text-xs text-slate-400 mb-6">Mise en place de lignes régulières pour le transport de vos équipes vers Gares & Aéroports.</p>
               <div className="h-px w-full bg-white/10 mb-6"></div>
               <Building2 className="w-10 h-10 text-blue-500 mb-4" />
               <h3 className="text-xl font-bold mb-2">Événementiel</h3>
@@ -402,6 +387,80 @@ export default function VTCPage() {
             </div>
           </div>
         </div>
+
+        {/* --- NOUVEAU BLOC SEO 1 : COMPARATIF TAXI & EXPRESS --- */}
+        <div className="mb-12">
+            <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase text-center mb-10">Pourquoi choisir VTC plutôt que <span className="text-blue-600">Taxi à Orléans ?</span></h2>
+            <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:border-blue-500 transition">
+                    <div className="flex items-center gap-4 mb-4">
+                        <Zap className="w-8 h-8 text-yellow-500" />
+                        <h3 className="text-xl font-bold uppercase">Courses Express & Urgences</h3>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                        Besoin d'un transport urgent ou d'une course express ? Contrairement aux taxis parfois indisponibles, nous trouvons une solution rapide pour vos impératifs.
+                    </p>
+                </div>
+                <div className="bg-white p-8 rounded-xl border border-slate-200 shadow-sm hover:border-blue-500 transition">
+                    <div className="flex items-center gap-4 mb-4">
+                        <CreditCard className="w-8 h-8 text-green-600" />
+                        <h3 className="text-xl font-bold uppercase">Prix Fixe Garanti</h3>
+                    </div>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                        Pour aller à Orly ou Roissy depuis Orléans, le compteur d'un taxi peut vite grimper. 
+                        Avec nous, le forfait est fixé à l'avance. Aucune surprise.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {/* --- NOUVEAU BLOC SEO 2 : ZONES D'INTERVENTION --- */}
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-8 mb-12 text-center">
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Prise en charge à domicile pour vos départs et arrivées</h3>
+            <div className="flex flex-wrap justify-center gap-3">
+                {["Orléans Centre", "Gare d'Orléans", "Saran", "Olivet", "Saint-Jean-de-Braye", "Fleury-les-Aubrais", "La Chapelle-Saint-Mesmin", "Ingré", "Semoy", "Chécy"].map((city) => (
+                    <span key={city} className="bg-white px-4 py-2 rounded-full text-xs font-bold text-slate-700 shadow-sm border border-slate-100 flex items-center gap-2">
+                        <MapPin className="w-3 h-3 text-blue-500" /> {city}
+                    </span>
+                ))}
+            </div>
+        </div>
+
+        {/* --- NOUVEAU BLOC SEO 3 : FAQ (Sans restrictions) --- */}
+        <div className="max-w-3xl mx-auto mb-16">
+             <h2 className="text-2xl font-black text-slate-900 uppercase text-center mb-8">Questions Fréquentes</h2>
+             <div className="space-y-4">
+                <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                    <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                        Réalisez-vous des courses express ou urgentes ?
+                        <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                    </summary>
+                    <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                        Oui, les courses express sont au cœur de notre métier. Contactez-nous immédiatement au 06 34 60 57 99 pour vérifier la disponibilité d'un chauffeur en urgence.
+                    </div>
+                </details>
+                <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                    <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                        Quels sont les tarifs pour Orly ou Roissy ?
+                        <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                    </summary>
+                    <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                        Nos forfaits démarrent à 180€ pour Orly et 210€ pour Roissy CDG. 
+                        Le tarif est fixe, bagages compris, peu importe la circulation.
+                    </div>
+                </details>
+                <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                    <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                        Desservez-vous les Gares Parisiennes ?
+                        <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                    </summary>
+                    <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                        Oui, nous assurons fréquemment la liaison Orléans vers Paris Austerlitz, Montparnasse ou Gare de Lyon pour vos correspondances TGV.
+                    </div>
+                </details>
+             </div>
+        </div>
+
       </div>
 
       {/* FOOTER */}
@@ -423,7 +482,7 @@ export default function VTCPage() {
                 <span className="text-xl font-black tracking-tighter text-white">MAPETRANS <span className="text-blue-700">.LD</span></span>
                 <span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Solutions de Transport</span>
               </div>
-              <p className="text-slate-400 text-xs leading-relaxed text-justify">Partenaire expert depuis 2015. Nous assurons vos transports critiques, navettes VIP et déménagements avec une exigence de qualité unique. Licences et assurances à jour.</p>
+              <p className="text-slate-400 text-xs leading-relaxed text-justify">Partenaire expert depuis 2013. Nous assurons vos transports critiques, navettes VIP et déménagements avec une exigence de qualité unique. Licences et assurances à jour.</p>
             </div>
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">Nos Services</h3>
@@ -449,8 +508,8 @@ export default function VTCPage() {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 uppercase tracking-wide gap-4">
             <span>Copyright 2025, Mapetrans LD. Tous droits réservés.</span>
             <div className="flex gap-6">
-              <Link href="#" className="hover:text-slate-400 transition">Mentions Légales</Link>
-              <Link href="#" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
+              <Link href="/mentions-legales" className="hover:text-slate-400 transition">Mentions Légales</Link>
+              <Link href="/confidentialite" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
             </div>
           </div>
         </div>
