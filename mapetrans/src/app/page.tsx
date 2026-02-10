@@ -622,7 +622,7 @@ export default function Home() {
               <Link href="/mentions-legales" className="hover:text-slate-400 transition">
                 Mentions Légales
               </Link>
-              <Link href="/confidentialite" className="hover:text-slate-400 transition">
+              <Link href="/confidentialitegit" className="hover:text-slate-400 transition">
                 Politique de Confidentialité
               </Link>
             </div>

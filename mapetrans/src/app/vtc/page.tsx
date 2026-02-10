@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle, Clock, MapPin, Building2, Truck, Users, Messag
 import Link from 'next/link';
 
 // ============================================================
-// ✅ CONFIGURATION : TON LIEN MAKE EST ICI
+// ✅ CONFIGURATION : TON LIEN MAKE
 // ============================================================
 const WEBHOOK_URL = "https://hook.eu1.make.com/76i7gdoab1yczetrzb9ypfcyy8l7arc8"; 
 // ============================================================
@@ -46,7 +46,7 @@ export default function VTCPage() {
       "Type Trajet": isRoundTrip ? "Aller-Retour" : "Aller Simple",
       "Nom": fd.get("nom"),
       "Prénom": fd.get("prenom"),
-      "Adresse Facturation": fd.get("adresse_facturation"),
+      "Adresse Facturation": "", // ✅ FORCE À VIDE (Pour garder la colonne Excel mais ne rien demander au client)
       "Téléphone": fd.get("telephone"),
       "Email": fd.get("user_email"),
       "Date Aller": fd.get("date"),
@@ -54,10 +54,13 @@ export default function VTCPage() {
       "Départ Aller": fd.get("depart"),
       "Destination Aller": fd.get("destination"),
       "N° Vol/Train Aller": fd.get("vol_train"),
+      
+      // Champs Retour (Vides si Aller Simple)
       "Date Retour": isRoundTrip ? fd.get("date_retour") : "", 
       "Heure Vol/Train Retour": isRoundTrip ? fd.get("time_retour") : "",
       "N° Vol/Train Retour": isRoundTrip ? fd.get("vol_train_retour") : "",
-      "Adresse Dépose Retour": isRoundTrip ? fd.get("destination_retour") : "",
+      "Adresse Dépose Retour": isRoundTrip ? fd.get("destination_retour") : "", // Correspond à ta nouvelle colonne Excel
+      
       "Nb Passagers": nbPassagers,
       "Véhicule": vehiculeAuto,
       "Infos Spécifiques": fd.get("details"),
@@ -75,6 +78,7 @@ export default function VTCPage() {
         alert("✅ Demande reçue ! Vous allez recevoir votre devis par email très rapidement.");
         formEl.reset();
         setIsRoundTrip(false); 
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         alert("❌ Une erreur est survenue lors de l'envoi. (Erreur Webhook)");
       }
@@ -205,7 +209,7 @@ export default function VTCPage() {
         )}
       </header>
 
-      {/* === 1. HERO VTC (TEXTES MODIFIÉS POUR SEO EXPRESS) === */}
+      {/* === 1. HERO VTC === */}
       <div className="relative h-[450px] w-full overflow-hidden flex items-center justify-center bg-slate-900">
         <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop" alt="Chauffeur VTC et Transport Express Orléans" className="absolute inset-0 w-full h-full object-cover animate-fade-in" />
         <div className="absolute inset-0 bg-slate-900/70"></div>
@@ -214,7 +218,6 @@ export default function VTCPage() {
           <h1 className="text-3xl md:text-6xl font-black text-white uppercase tracking-tight mb-6 drop-shadow-lg">
              Navette VTC & <br/> <span className="text-blue-500">Service de Transport Prioritaire</span>
           </h1>
-          {/* TEXTE CORRIGÉ : EXPRESS & SANS RESTRICTION */}
           <p className="text-slate-200 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
             Alternative Taxi pour vos navettes aéroports (Orly, Roissy), gares et <strong>courses express</strong>. <br/>
             Service disponible 24h/7j pour tous vos trajets, sans restriction de distance.
@@ -227,7 +230,7 @@ export default function VTCPage() {
         </div>
       </div>
 
-      {/* === 2. FORMULAIRE (INTACT) === */}
+      {/* === 2. FORMULAIRE === */}
       <div id="booking" className="relative z-20 px-4 max-w-5xl mx-auto w-full -mt-0 mt-12 mb-20 animate-fade-in delay-100">
         <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
           <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
@@ -281,7 +284,7 @@ export default function VTCPage() {
                 <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Email</label><input type="email" name="user_email" placeholder="votre@email.com" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
               </div>
 
-              <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse de Facturation (Rue, CP, Ville)</label><input type="text" name="adresse_facturation" placeholder="Ex: 10 Rue Royale, 45000 Orléans" required className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none" /></div>
+              {/* ✅ CHAMP ADRESSE FACTURATION SUPPRIMÉ DU VISUEL */}
               
               <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Information Spécifique (Optionnel)</label><textarea name="details" placeholder="Siège bébé, animal, bagages volumineux, code porte..." className="w-full h-20 border border-slate-300 rounded-sm px-3 py-2 text-sm font-medium focus:border-blue-600 outline-none resize-none"></textarea></div>
 
@@ -428,8 +431,8 @@ export default function VTCPage() {
 
         {/* --- NOUVEAU BLOC SEO 3 : FAQ (Sans restrictions) --- */}
         <div className="max-w-3xl mx-auto mb-16">
-             <h2 className="text-2xl font-black text-slate-900 uppercase text-center mb-8">Questions Fréquentes</h2>
-             <div className="space-y-4">
+              <h2 className="text-2xl font-black text-slate-900 uppercase text-center mb-8">Questions Fréquentes</h2>
+              <div className="space-y-4">
                 <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
                     <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
                         Réalisez-vous des courses express ou urgentes ?
