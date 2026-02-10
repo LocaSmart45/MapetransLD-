@@ -1,185 +1,188 @@
 "use client";
 
-async function sendLead(payload: any) {
-  const res = await fetch("/api/leads", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) throw new Error("lead_failed");
-}
-
-
-import React, { useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ArrowRight,
   CheckCircle,
-  Shield,
   Clock,
   MapPin,
   Building2,
   Truck,
   Users,
   MessageSquare,
-  Search,
-  ChevronDown,
-  Package,
   Box,
-  Layers,
   Menu,
   X,
   Phone,
   Mail,
-  FileText,
   ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
+// Modes du hero (VTC / Transport / Déménagement)
+const MODES = [
+  {
+    key: "vtc",
+    highlight: "VTC & Navettes Aéroports",
+    description:
+      "Navettes privées vers Orly, Roissy, les gares parisiennes et vos destinations longue distance.",
+    ctaLabel: "Demander un devis VTC",
+    ctaHref: "/vtc#booking",
+    bullet1Title: "Orléans & Agglo",
+    bullet1Text:
+      "Prise en charge à domicile, en gare ou en entreprise pour tous vos départs et arrivées.",
+    bullet2Title: "France & Europe",
+    bullet2Text:
+      "Liaisons vers Orly, Roissy, Paris et grandes distances, 7j/7.",
+    imageSrc:
+      "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop",
+    imageAlt: "Chauffeur VTC à Orléans",
+    bannerTitle: "Navettes Aéroports",
+    bannerSubtitle: "Orléans → Orly, Roissy, Gares Parisiennes",
+    bannerBadge: "VTC • 24/7",
+  },
+  {
+    key: "logistique",
+    highlight: "Transport & Logistique",
+    description:
+      "Courses express, tournées régulières et transport dédié de vos marchandises en France et en Europe.",
+    ctaLabel: "Demander une cotation transport",
+    ctaHref: "/logistique",
+    bullet1Title: "Courses express",
+    bullet1Text:
+      "Enlèvement rapide de vos colis, pièces ou documents sensibles, avec suivi.",
+    bullet2Title: "Tournées & Fret",
+    bullet2Text:
+      "Tournées régulières et transport dédié pour vos flux logistiques.",
+    imageSrc:
+      "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2070&auto=format&fit=crop", // camion & palettes
+    imageAlt: "Camion et palettes de transport logistique",
+    bannerTitle: "Transport Express & Fret",
+    bannerSubtitle: "Courses urgentes, tournées & flux réguliers",
+    bannerBadge: "FRET • EXPRESS",
+  },
+  {
+    key: "demenagement",
+    highlight: "Déménagement & Stockage",
+    description:
+      "Déménagements locaux ou nationaux, avec des solutions de garde-meubles sécurisées pour vos biens.",
+    ctaLabel: "Demander un devis déménagement",
+    ctaHref: "/demenagement",
+    bullet1Title: "Déménagement local",
+    bullet1Text:
+      "Orléans, Loiret et régions proches, avec équipe dédiée et matériel adapté.",
+    bullet2Title: "National & stockage",
+    bullet2Text:
+      "Déménagements longue distance et garde-meubles sécurisé selon la durée souhaitée.",
+    imageSrc:
+      "https://images.pexels.com/photos/4246202/pexels-photo-4246202.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1", // déménageurs & cartons
+    imageAlt: "Équipe de déménagement avec cartons",
+    bannerTitle: "Déménagement & Stockage",
+    bannerSubtitle: "Local, national & garde-meubles",
+    bannerBadge: "DÉMÉNAGEMENT",
+  },
+];
 
-  // Header / UI
+export default function HomePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [modeIndex, setModeIndex] = useState(0);
 
-  // ✅ Assistant (2 pôles)
-  const [activePole, setActivePole] = useState<"vtc" | "cargo">("vtc");
-  const [cargoChoice, setCargoChoice] = useState<"logistique" | "demenagement">(
-    "logistique"
-  );
+  const mode = MODES[modeIndex];
 
-  // ✅ Modal "Être rappelé"
-  const [isCallbackOpen, setIsCallbackOpen] = useState(false);
-
-  // Scroll helper (quand on clique une carte)
-  const assistantRef = useRef<HTMLDivElement | null>(null);
-  const scrollToAssistant = () =>
-    assistantRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-
-  // Données (on garde ton style de liste)
-  const servicesData = {
-    vtc: [
-      "Navette Aéroport ORLY",
-      "Navette Aéroport ROISSY CDG",
-      "Navette Aéroport BEAUVAIS",
-      "Navette Aéroport TOURS",
-      "Navette GARES PARISIENNES",
-      "Berline / Trajet sur mesure",
-    ],
-    cargo: [
-      "Pli Urgent / Colis (Véhicule Léger)",
-      "14m³ / 20m³ (Messagerie/Palette)",
-      "Porteur Poids Lourd",
-      "Semi-Remorque (Complet 44T)",
-      "Transport Frigorifique",
-      "Déménagement Particulier / Pro",
-      "Garde-Meubles (Stockage)",
-      "Location Monte-Meuble",
-    ],
-  };
-
-  // ✅ Redirection selon choix (comme tu veux)
-  const handleAssistantGo = () => {
-    if (activePole === "vtc") {
-      router.push("/vtc");
-      return;
-    }
-    router.push(cargoChoice === "logistique" ? "/logistique" : "/demenagement");
-  };
+  // Auto-rotation des modes (VTC -> Transport -> Déménagement)
+  useEffect(() => {
+    const id = setInterval(() => {
+      setModeIndex((prev) => (prev + 1) % MODES.length);
+    }, 6000); // toutes les 6 secondes
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-32 xl:pt-36 flex flex-col">
-      {/* Anim slider (ton code) */}
-      <style jsx>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-scroll {
-          animation: scroll 30s linear infinite;
-        }
-      `}</style>
-
-      {/* 0. ARRIÈRE-PLAN (ton code) */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-white -z-10 border-b border-slate-200">
-        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(to_right,#000_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+      {/* ARRIÈRE-PLAN */}
+      <div className="absolute top-0 left-0 w-full h-[620px] bg-white -z-10 border-b border-slate-200">
+        <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(circle_at_top,_#1d4ed8_0,_transparent_55%),linear-gradient(#000_1px,transparent_1px),linear-gradient(to_right,#000_1px,transparent_1px)] bg-[size:100%_100%,40px_40px,40px_40px]" />
       </div>
 
-      {/* === HEADER (ton style, + être rappelé modal) === */}
-      <header className="fixed top-0 w-full z-50 shadow-sm bg-white transition-all duration-300">
+      {/* === HEADER === */}
+      <header className="fixed top-0 w-full z-50 shadow-sm bg-white/90 backdrop-blur-md transition-all duration-300">
+        {/* Top bar */}
         <div className="bg-slate-900 text-slate-300 h-9 md:h-10 flex items-center justify-between text-[9px] md:text-[11px] font-medium tracking-wide uppercase px-4 overflow-hidden whitespace-nowrap">
           <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
             <Clock className="w-3 h-3 text-blue-400" />
-            <span className="text-white font-bold">Astreinte 24h/24 7j/7</span>
+            <span className="text-white font-bold">
+              Astreinte 24h/24 7j/7
+            </span>
           </div>
           <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
             <CheckCircle className="w-3 h-3 text-green-400" />
-            <span className="hidden md:inline">Devis Gratuit & Réponse Immédiate</span>
-            <span className="md:hidden">Réponse Immédiate</span>
+            <span className="hidden md:inline">
+              Devis Gratuit &amp; Réponse Immédiate
+            </span>
           </div>
         </div>
 
-        <nav className="border-b border-slate-200 h-20 md:h-24 flex items-center relative bg-white z-50">
+        {/* Nav */}
+        <nav className="border-b border-slate-200 h-20 md:h-24 flex items-center relative bg-white/90 backdrop-blur-md z-50">
           <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
+            {/* Logo */}
             <div className="flex flex-col leading-none cursor-pointer group pr-2">
-              <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
-                MAPETRANS <span className="text-blue-700">LD</span>
-              </span>
+              <Link href="/">
+                <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
+                  MAPETRANS <span className="text-blue-700">LD</span>
+                </span>
+              </Link>
               <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
                 Solutions de Transport
               </span>
             </div>
 
+            {/* Menu desktop */}
             <div className="hidden xl:flex items-center text-[10px] font-extrabold text-slate-600 tracking-widest uppercase">
               <Link
                 href="/agence"
                 className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0"
               >
-                <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />{" "}
-                L'Agence
+                <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />
+                L&apos;Agence
               </Link>
               <Link
                 href="/vtc"
                 className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0"
               >
-                <Users className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />{" "}
-                VTC & Chauffeurs
+                <Users className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />
+                VTC &amp; Chauffeurs
               </Link>
               <Link
                 href="/logistique"
                 className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0"
               >
-                <Truck className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />{" "}
-                Logistique
+                <Truck className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />
+                Logistique &amp; Fret
               </Link>
               <Link
                 href="/demenagement"
                 className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0"
               >
-                <Box className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />{" "}
+                <Box className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />
                 Déménagement
               </Link>
-
-              {/* ✅ au lieu de “#contact”, on ouvre le modal */}
-              <button
-                onClick={() => setIsCallbackOpen(true)}
+              <Link
+                href="/contact"
                 className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group"
               >
-                <MessageSquare className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />{" "}
-                Être rappelé
-              </button>
+                <MessageSquare className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" />
+                Contact
+              </Link>
             </div>
 
+            {/* CTA + burger */}
             <div className="flex items-center gap-3 md:gap-4">
               <a
                 href="tel:0634605799"
                 className="xl:hidden flex items-center gap-2 bg-blue-700 text-white px-3 py-2 rounded-sm shadow-md hover:bg-blue-800 transition"
               >
-                <Phone className="w-3 h-3" />{" "}
+                <Phone className="w-3 h-3" />
                 <span className="text-[10px] font-black tracking-wider">
                   06 34 60 57 99
                 </span>
@@ -188,35 +191,36 @@ export default function Home() {
               <div className="hidden xl:flex items-center gap-6 pl-6">
                 <div className="flex flex-col items-end text-right">
                   <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
-                    Urgence & Réservation
+                    Urgence &amp; Réservation
                   </span>
-                  <a
-                    href="tel:0634605799"
-                    className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono"
-                  >
+                  <span className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono">
                     06 34 60 57 99
-                  </a>
+                  </span>
                 </div>
-
-                {/* ✅ Devis Express → ouvre modal aussi (optionnel mais cohérent) */}
-                <button
-                  onClick={() => setIsCallbackOpen(true)}
-                  className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-sm font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase"
+                {/* CTA FIXE DU HEADER */}
+                <Link
+                  href="/vtc#booking"
+                  className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-full font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase"
                 >
                   Devis Express
-                </button>
+                </Link>
               </div>
 
               <button
                 className="xl:hidden p-1 text-slate-800"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+                {isMobileMenuOpen ? (
+                  <X className="w-7 h-7" />
+                ) : (
+                  <Menu className="w-7 h-7" />
+                )}
               </button>
             </div>
           </div>
         </nav>
 
+        {/* Menu mobile */}
         {isMobileMenuOpen && (
           <div className="fixed inset-0 top-28 z-40 bg-white border-t border-slate-100 p-6 flex flex-col gap-6 xl:hidden overflow-y-auto pb-32">
             <div className="flex flex-col gap-4 text-sm font-black uppercase tracking-wider text-slate-800">
@@ -225,21 +229,23 @@ export default function Home() {
                 className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Building2 className="w-5 h-5 text-blue-700" /> L'Agence
+                <Building2 className="w-5 h-5 text-blue-700" /> L&apos;Agence
               </Link>
               <Link
                 href="/vtc"
                 className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Users className="w-5 h-5 text-blue-700" /> VTC & Chauffeurs
+                <Users className="w-5 h-5 text-blue-700" /> VTC &amp;
+                Chauffeurs
               </Link>
               <Link
                 href="/logistique"
                 className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Truck className="w-5 h-5 text-blue-700" /> Logistique
+                <Truck className="w-5 h-5 text-blue-700" /> Logistique &amp;
+                Fret
               </Link>
               <Link
                 href="/demenagement"
@@ -248,367 +254,507 @@ export default function Home() {
               >
                 <Box className="w-5 h-5 text-blue-700" /> Déménagement
               </Link>
-
-              {/* ✅ mobile : ouvre modal */}
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsCallbackOpen(true);
-                }}
-                className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100 text-left"
+              <Link
+                href="/contact"
+                className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
-                <MessageSquare className="w-5 h-5 text-blue-700" /> Être rappelé
-              </button>
+                <MessageSquare className="w-5 h-5 text-blue-700" /> Contact
+              </Link>
             </div>
           </div>
         )}
       </header>
 
-      {/* === CONTENU === */}
-      <div className="relative z-10 pb-8 md:pb-16 px-4 md:px-6 max-w-7xl mx-auto pt-8 md:pt-12 w-full">
-        {/* 1) HERO (ton style) */}
-        <div className="max-w-5xl mx-auto mb-10 text-center">
-          <h1 className="text-3xl md:text-6xl font-black tracking-tight text-slate-900 mb-8 uppercase leading-tight md:leading-none">
-            Transport, Logistique <br /> <span className="text-slate-400">& Déménagement.</span>
-          </h1>
-          <div className="flex flex-wrap justify-center gap-3 md:gap-10 text-[10px] md:text-sm font-bold text-slate-700 uppercase tracking-wider bg-white py-3 px-4 md:px-8 rounded-lg shadow-sm border border-slate-200 w-full md:w-fit mx-auto">
-            <span className="flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-blue-600 rounded-full"></span> Transport de Personnes
+      {/* === 1. HERO ACCUEIL ANIMÉ === */}
+      <section className="relative max-w-7xl mx-auto px-4 w-full mt-6 mb-16">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          {/* Texte hero */}
+          <div className="space-y-6">
+            <span className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.25em] uppercase text-blue-700 bg-blue-50/80 border border-blue-100 px-3 py-1 rounded-full shadow-sm">
+              <MapPin className="w-3 h-3" />
+              Orléans &amp; Loiret
             </span>
-            <span className="flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-blue-600 rounded-full"></span> Transport & Logistique
-            </span>
-            <span className="flex items-center gap-1.5 whitespace-nowrap">
-              <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-blue-600 rounded-full"></span> Déménagement & Stockage
-            </span>
-          </div>
-        </div>
 
-        {/* 2) ✅ 2 CARTES (ton style de carte premium) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-          <button
-            type="button"
-            onClick={() => {
-              setActivePole("vtc");
-              scrollToAssistant();
-            }}
-            className="group relative h-[350px] md:h-[450px] rounded-2xl overflow-hidden cursor-pointer shadow-xl shadow-slate-200 hover:shadow-2xl transition-all duration-500 border border-slate-200 block text-left"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2070&auto=format&fit=crop"
-              alt="Transport Prestige Volant"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/20 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full">
-              <div className="bg-white/10 backdrop-blur-md w-fit px-3 py-1 rounded-full text-[9px] font-bold text-white mb-3 border border-white/20 tracking-wider uppercase">
-                Voyageurs
-              </div>
-              <h2 className="text-xl md:text-2xl font-black text-white mb-2 uppercase">VTC & Affaires</h2>
-              <p className="text-slate-300 text-xs max-w-xs leading-relaxed font-medium mb-4">
-                Navettes aéroports, Gares & Chauffeurs privés.
+            <div className="space-y-4">
+              <h1 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight tracking-tight">
+                Transport &amp; Navettes à Orléans
+                <br />
+                <span className="text-blue-700">{mode.highlight}</span>
+              </h1>
+
+              <p className="text-sm md:text-base text-slate-600 max-w-xl leading-relaxed">
+                {mode.description} Basés à Orléans, nous intervenons dans tout
+                le Loiret, en France et en Europe pour les particuliers et les
+                professionnels.
               </p>
-              <div className="flex items-center gap-2 text-white font-bold text-[10px] group-hover:gap-4 transition-all uppercase">
-                Choisir <ArrowRight className="w-3 h-3 transform group-hover:translate-x-1 transition-transform" />
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href={mode.ctaHref}
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-full text-xs font-bold uppercase tracking-[0.2em] shadow-lg hover:bg-blue-700 transition"
+                >
+                  {mode.ctaLabel}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/agence"
+                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-slate-600 hover:text-blue-700"
+                >
+                  Découvrir l&apos;agence
+                  <ArrowUpRight className="w-3 h-3" />
+                </Link>
               </div>
             </div>
-          </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              setActivePole("cargo");
-              scrollToAssistant();
-            }}
-            className="group relative h-[350px] md:h-[450px] rounded-2xl overflow-hidden cursor-pointer shadow-xl shadow-slate-200 hover:shadow-2xl transition-all duration-500 border border-slate-200 block text-left"
-          >
-            <img
-              src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2070&auto=format&fit=crop"
-              alt="Logistique Camion"
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-950/95 via-blue-900/20 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full">
-              <div className="bg-white/10 backdrop-blur-md w-fit px-3 py-1 rounded-full text-[9px] font-bold text-white mb-3 border border-white/20 tracking-wider uppercase">
-                Marchandises
+            <div className="flex flex-wrap gap-4 pt-2 text-[11px] text-slate-500">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <span>Devis gratuit &amp; réponse rapide</span>
               </div>
-              <h2 className="text-xl md:text-2xl font-black text-white mb-2 uppercase">Transport & Logistique</h2>
-              <p className="text-blue-100 text-xs max-w-sm leading-relaxed font-medium mb-4">
-                Fret, déménagement & stockage (France & Europe).
-              </p>
-              <div className="flex items-center gap-2 text-white font-bold text-[10px] group-hover:gap-4 transition-all uppercase">
-                Choisir <ArrowRight className="w-3 h-3 transform group-hover:translate-x-1 transition-transform" />
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <span>Service 24h/24 – 7j/7</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <span>Particuliers &amp; professionnels</span>
               </div>
             </div>
-          </button>
-        </div>
-
-        {/* 3) ✅ ASSISTANT (remplace ton dashboard, même charte) */}
-        <div
-          ref={assistantRef}
-          className="bg-white rounded-lg shadow-xl shadow-slate-200 border border-slate-200 max-w-7xl mx-auto overflow-hidden mb-12"
-        >
-          {/* Tabs 2 pôles */}
-          <div className="flex border-b border-slate-200 bg-slate-50 overflow-x-auto">
-            <button
-              onClick={() => setActivePole("vtc")}
-              className={`flex-1 py-4 px-4 text-[9px] md:text-xs font-black uppercase tracking-widest flex justify-center items-center gap-2 min-w-[160px] transition-colors
-              ${
-                activePole === "vtc"
-                  ? "bg-white text-blue-700 border-t-2 border-blue-700"
-                  : "text-slate-500 hover:text-slate-700 hover:bg-slate-100 border-t-2 border-transparent"
-              }`}
-            >
-              <Users className="w-3 h-3 md:w-4 md:h-4" /> Transport Pers.
-            </button>
-
-            <button
-              onClick={() => setActivePole("cargo")}
-              className={`flex-1 py-4 px-4 text-[9px] md:text-xs font-black uppercase tracking-widest flex justify-center items-center gap-2 min-w-[160px] transition-colors
-              ${
-                activePole === "cargo"
-                  ? "bg-white text-blue-700 border-t-2 border-blue-700"
-                  : "text-slate-500 hover:text-slate-700 hover:bg-slate-100 border-t-2 border-transparent"
-              }`}
-            >
-              <Package className="w-3 h-3 md:w-4 md:h-4" /> Transport & Log.
-            </button>
           </div>
 
-          <div className="p-4 md:p-8 bg-white">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 items-end">
-              {/* Select service */}
-              <div className="md:col-span-4">
-                <label className="block text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 md:mb-2">
-                  {activePole === "vtc" ? "Destination / Forfait" : "Type de prestation"}
-                </label>
+          {/* Carte hero avec photos qui défilent */}
+          <div className="relative">
+            <div className="absolute -top-8 -right-10 w-52 h-52 bg-blue-600/20 rounded-full blur-3xl" />
+            <div className="absolute -bottom-8 -left-10 w-40 h-40 bg-slate-900/10 rounded-full blur-3xl" />
 
-                <div className="relative w-full bg-slate-50 h-10 md:h-12 border border-slate-200 rounded-sm px-4 flex items-center">
-                  <select className="w-full bg-transparent text-xs md:text-sm font-bold text-slate-800 appearance-none focus:outline-none cursor-pointer z-10">
-                    {(activePole === "vtc" ? servicesData.vtc : servicesData.cargo).map((s, idx) => (
-                      <option key={`${s}-${idx}`} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-slate-400 absolute right-4 pointer-events-none" />
+            <div className="relative bg-white/90 border border-slate-200 rounded-3xl shadow-xl overflow-hidden backdrop-blur">
+              {/* Image */}
+              <div className="relative">
+                <img
+                  key={mode.key} // pour bien rafraîchir l'image quand le mode change
+                  src={mode.imageSrc}
+                  alt={mode.imageAlt}
+                  className="w-full h-56 md:h-72 object-cover transition-opacity duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-[11px] text-slate-100">
+                  <div className="flex flex-col">
+                    <span className="font-bold uppercase tracking-[0.2em]">
+                      {mode.bannerTitle}
+                    </span>
+                    <span className="text-slate-200">
+                      {mode.bannerSubtitle}
+                    </span>
+                  </div>
+                  <span className="bg-white/10 border border-white/20 px-3 py-1 rounded-full backdrop-blur-sm font-mono text-[10px]">
+                    {mode.bannerBadge}
+                  </span>
                 </div>
               </div>
 
-              {/* Champs dynamiques */}
-              {activePole === "vtc" ? (
-                <>
-                  <div className="md:col-span-4">
-                    <label className="block text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 md:mb-2">
-                      Lieu de prise en charge
-                    </label>
-                    <div className="w-full bg-slate-50 h-10 md:h-12 border border-slate-200 rounded-sm px-4 flex items-center gap-3 hover:border-blue-500 transition cursor-text group focus-within:border-blue-500">
-                      <MapPin className="w-3 h-3 md:w-4 md:h-4 text-slate-400 group-focus-within:text-blue-500" />
-                      <input
-                        type="text"
-                        placeholder="Orléans ou alentours..."
-                        className="w-full bg-transparent outline-none text-xs md:text-sm font-bold text-slate-800 placeholder-slate-400"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 md:mb-2">
-                      Passagers
-                    </label>
-                    <div className="relative w-full bg-slate-50 h-10 md:h-12 border border-slate-200 rounded-sm px-4 flex items-center">
-                      <Users className="w-3 h-3 md:w-4 md:h-4 text-slate-400 mr-2" />
-                      <select className="w-full bg-transparent text-xs md:text-sm font-bold text-slate-800 appearance-none focus:outline-none cursor-pointer z-10">
-                        <option>1 à 3 personnes</option>
-                        <option>4 à 6 personnes</option>
-                        <option>7 à 8 personnes</option>
-                      </select>
-                      <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-slate-400 absolute right-4 pointer-events-none" />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="md:col-span-3">
-                    <label className="block text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 md:mb-2">
-                      Départ
-                    </label>
-                    <div className="w-full bg-slate-50 h-10 md:h-12 border border-slate-200 rounded-sm px-4 flex items-center gap-3 hover:border-blue-500 transition cursor-text group focus-within:border-blue-500">
-                      <MapPin className="w-3 h-3 md:w-4 md:h-4 text-slate-400 group-focus-within:text-blue-500" />
-                      <input
-                        type="text"
-                        placeholder="Ville ou Code Postal..."
-                        className="w-full bg-transparent outline-none text-xs md:text-sm font-bold text-slate-800 placeholder-slate-400"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-3">
-                    <label className="block text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 md:mb-2">
-                      Arrivée
-                    </label>
-                    <div className="w-full bg-slate-50 h-10 md:h-12 border border-slate-200 rounded-sm px-4 flex items-center gap-3 hover:border-blue-500 transition cursor-text group focus-within:border-blue-500">
-                      <MapPin className="w-3 h-3 md:w-4 md:h-4 text-slate-400 group-focus-within:text-blue-500" />
-                      <input
-                        type="text"
-                        placeholder="Destination..."
-                        className="w-full bg-transparent outline-none text-xs md:text-sm font-bold text-slate-800 placeholder-slate-400"
-                      />
-                    </div>
-                  </div>
-
-                  {/* ✅ Choix route cargo */}
-                  <div className="md:col-span-2">
-                    <label className="block text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 md:mb-2">
-                      Orientation
-                    </label>
-                    <div className="relative w-full bg-slate-50 h-10 md:h-12 border border-slate-200 rounded-sm px-4 flex items-center">
-                      <Truck className="w-3 h-3 md:w-4 md:h-4 text-slate-400 mr-2" />
-                      <select
-                        value={cargoChoice}
-                        onChange={(e) => setCargoChoice(e.target.value as "logistique" | "demenagement")}
-                        className="w-full bg-transparent text-xs md:text-sm font-bold text-slate-800 appearance-none focus:outline-none cursor-pointer z-10"
+              {/* Contenu carte */}
+              <div className="p-5 md:p-6 space-y-4">
+                {/* Tabs services */}
+                <div className="flex flex-wrap items-center gap-4 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 border-b border-slate-200 pb-3">
+                  {[
+                    {
+                      key: "vtc",
+                      label: "Navettes VTC",
+                      icon: <Users className="w-3 h-3" />,
+                    },
+                    {
+                      key: "logistique",
+                      label: "Transport & Fret",
+                      icon: <Truck className="w-3 h-3" />,
+                    },
+                    {
+                      key: "demenagement",
+                      label: "Déménagement",
+                      icon: <Box className="w-3 h-3" />,
+                    },
+                  ].map((item) => {
+                    const isActive = item.key === mode.key;
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        onClick={() => {
+                          const idx = MODES.findIndex(
+                            (m) => m.key === item.key
+                          );
+                          if (idx !== -1) setModeIndex(idx);
+                        }}
+                        className={[
+                          "inline-flex items-center gap-2 px-3 py-1 rounded-full transition",
+                          isActive
+                            ? "bg-blue-50 text-blue-700 border border-blue-200"
+                            : "text-slate-500 hover:text-blue-700 hover:bg-slate-50 border border-transparent",
+                        ].join(" ")}
                       >
-                        <option value="logistique">Fret / Logistique</option>
-                        <option value="demenagement">Déménagement / Stockage</option>
-                      </select>
-                      <ChevronDown className="w-3 h-3 md:w-4 md:h-4 text-slate-400 absolute right-4 pointer-events-none" />
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Bullets dynamiques */}
+                <div className="grid grid-cols-2 gap-4 text-[11px] text-slate-600">
+                  <div className="space-y-1">
+                    <div className="font-bold text-slate-900">
+                      {mode.bullet1Title}
                     </div>
+                    <p>{mode.bullet1Text}</p>
                   </div>
-                </>
-              )}
+                  <div className="space-y-1">
+                    <div className="font-bold text-slate-900">
+                      {mode.bullet2Title}
+                    </div>
+                    <p>{mode.bullet2Text}</p>
+                  </div>
+                </div>
 
-              {/* CTA */}
-              <div className="md:col-span-3">
-                <button
-                  onClick={handleAssistantGo}
-                  className="w-full h-10 md:h-12 bg-blue-700 text-white rounded-sm font-bold uppercase tracking-wide text-xs flex items-center justify-center gap-2 hover:bg-slate-900 transition shadow-lg"
-                >
-                  <Search className="w-3 h-3 md:w-4 md:h-4" /> Continuer
-                </button>
-
-                <button
-                  onClick={() => setIsCallbackOpen(true)}
-                  className="w-full mt-2 h-10 md:h-12 bg-white text-slate-900 rounded-sm font-bold uppercase tracking-wide text-xs flex items-center justify-center gap-2 border border-slate-200 hover:bg-slate-50 transition"
-                >
-                  <MessageSquare className="w-3 h-3 md:w-4 md:h-4" /> Être rappelé
-                </button>
+                {/* Bas de carte */}
+                <div className="flex justify-between items-center text-xs border-t border-slate-100 pt-4">
+                  <div className="flex items-center gap-2 text-slate-500">
+                    <Clock className="w-4 h-4 text-blue-600" />
+                    <span>Service 24h/24 – 7j/7</span>
+                  </div>
+                  <a
+                    href="tel:0634605799"
+                    className="font-mono text-sm font-bold text-slate-900 hover:text-blue-700 transition"
+                  >
+                    06 34 60 57 99
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* SLIDER (ton code inchangé) */}
-        <div className="mt-8 w-full overflow-hidden bg-white border-y border-slate-100 py-6">
-          <div className="flex w-fit animate-scroll gap-16">
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex gap-16 items-center whitespace-nowrap">
-                <div className="flex items-center gap-3">
-                  <Shield className="w-6 h-6 text-slate-400" />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Sécurité</span>
-                    <span className="text-sm font-black text-slate-800 uppercase">Assurances & Licences</span>
-                  </div>
+      {/* === 2. BLOC : PLUS QU'UN TRANSPORTEUR === */}
+      <section className="max-w-7xl mx-auto px-4 w-full mb-16">
+        <div className="grid lg:grid-cols-2 gap-10 items-start">
+          {/* Bloc texte */}
+          <div className="space-y-5">
+            <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase">
+              Plus qu&apos;un simple transporteur
+            </h2>
+            <div className="w-16 h-[3px] bg-blue-700 rounded-full" />
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed text-justify">
+              MAPETRANS LD est une entreprise de transport indépendante basée à
+              Orléans. Nous avons fait le choix de privilégier le service, la
+              proximité et la qualité plutôt que les plateformes
+              impersonnelles. Chaque mission est suivie, préparée et réalisée
+              avec la même exigence, qu&apos;il s&apos;agisse d&apos;une navette
+              aéroport, d&apos;un déménagement familial ou d&apos;un transport
+              express pour une entreprise.
+            </p>
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed text-justify">
+              Nous accompagnons au quotidien les particuliers et les
+              professionnels du Loiret, avec une connaissance fine du
+              territoire, des contraintes horaires et des impératifs métiers.
+              Vous disposez d&apos;un interlocuteur unique, capable d&apos;
+              organiser et de coordonner l&apos;ensemble de vos besoins en
+              mobilité et en logistique.
+            </p>
+
+            <div className="grid sm:grid-cols-3 gap-4 pt-2 text-[11px] text-slate-600">
+              <div className="bg-white border border-slate-200 rounded-xl p-3">
+                <div className="font-bold text-slate-900 mb-1">
+                  Particuliers
                 </div>
-                <div className="flex items-center gap-3">
-                  <Layers className="w-6 h-6 text-slate-400" />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Stockage</span>
-                    <span className="text-sm font-black text-slate-800 uppercase">Garde-Meubles & Box</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Clock className="w-6 h-6 text-slate-400" />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Disponibilité</span>
-                    <span className="text-sm font-black text-slate-800 uppercase">Service 24h/24 et 7j/7</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-6 h-6 text-slate-400" />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Zone</span>
-                    <span className="text-sm font-black text-slate-800 uppercase">France & Europe</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <FileText className="w-6 h-6 text-slate-400" />
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Tarifs</span>
-                    <span className="text-sm font-black text-slate-800 uppercase">Devis Gratuit sous 1h</span>
-                  </div>
-                </div>
+                <p>
+                  Navettes aéroports, retours de soirées, déménagements et
+                  transferts longue distance.
+                </p>
               </div>
-            ))}
+              <div className="bg-white border border-slate-200 rounded-xl p-3">
+                <div className="font-bold text-slate-900 mb-1">
+                  Professionnels
+                </div>
+                <p>
+                  Déplacements collaborateurs, clients VIP, transport express de
+                  marchandises, événements.
+                </p>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-xl p-3">
+                <div className="font-bold text-slate-900 mb-1">Sur mesure</div>
+                <p>
+                  Organisation complète, horaires adaptés, suivi personnalisé,
+                  solutions récurrentes ou ponctuelles.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bloc domaines d'intervention */}
+          <div className="space-y-6">
+            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-[0.25em]">
+              Nos domaines d&apos;intervention
+            </h3>
+
+            <div className="space-y-4">
+              <Link
+                href="/vtc"
+                className="group block bg-white border border-slate-200 rounded-2xl p-5 hover:border-blue-600 hover:shadow-lg transition"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <Users className="w-6 h-6 text-blue-600" />
+                    <div>
+                      <div className="text-sm font-black uppercase text-slate-900">
+                        VTC &amp; Navettes Aéroports
+                      </div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        Orléans &rarr; Orly, Roissy, gares parisiennes &amp;
+                        grandes distances.
+                      </div>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition" />
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Transferts privés, navettes collaborateurs, prise en charge
+                  personnalisée à domicile ou en entreprise, 7j/7.
+                </p>
+              </Link>
+
+              <Link
+                href="/logistique"
+                className="group block bg-white border border-slate-200 rounded-2xl p-5 hover:border-blue-600 hover:shadow-lg transition"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <Truck className="w-6 h-6 text-blue-600" />
+                    <div>
+                      <div className="text-sm font-black uppercase text-slate-900">
+                        Transport &amp; Logistique
+                      </div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        Courses express, tournées régulières et transport
+                        dédié.
+                      </div>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition" />
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Livraison urgente de pièces, documents et marchandises
+                  sensibles, avec suivi et interlocuteur unique.
+                </p>
+              </Link>
+
+              <Link
+                href="/demenagement"
+                className="group block bg-white border border-slate-200 rounded-2xl p-5 hover:border-blue-600 hover:shadow-lg transition"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <Box className="w-6 h-6 text-blue-600" />
+                    <div>
+                      <div className="text-sm font-black uppercase text-slate-900">
+                        Déménagement &amp; Stockage
+                      </div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">
+                        Déménagements locaux &amp; nationaux, garde-meubles.
+                      </div>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition" />
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Accompagnement complet, de la préparation à l&apos;installation,
+                  avec des solutions de stockage adaptées.
+                </p>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* FOOTER (ton code, inchangé sauf "depuis 2015" si tu veux le corriger) */}
+      {/* === 3. BLOC : ENGAGEMENTS & RASSURANCE === */}
+      <section className="max-w-7xl mx-auto px-4 w-full mb-20">
+        <div className="bg-slate-900 text-white rounded-3xl p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20" />
+          <div className="relative z-10 grid md:grid-cols-2 gap-10 items-start">
+            <div>
+              <span className="text-blue-400 font-bold tracking-widest text-xs uppercase mb-2 block">
+                Engagements &amp; conformité
+              </span>
+              <h2 className="text-2xl md:text-3xl font-black uppercase mb-4">
+                Une entreprise de transport
+                <br />
+                fiable &amp; déclarée
+              </h2>
+              <p className="text-sm text-slate-300 leading-relaxed mb-5">
+                Tous nos véhicules et chauffeurs sont déclarés, assurés et
+                contrôlés. Nous travaillons dans le respect des réglementations
+                VTC et transport de marchandises, pour une collaboration
+                sereine, transparente et durable.
+              </p>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Que vous soyez un particulier ou une entreprise, vous bénéficiez
+                des mêmes garanties de ponctualité, de sécurité et de suivi. Un
+                interlocuteur dédié coordonne vos demandes, de la première
+                prise de contact jusqu&apos;à la facturation.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 text-sm">
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-5 h-5 text-blue-400" />
+                  <span className="font-bold">Licences &amp; assurances</span>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  Véhicules conformes, chauffeurs déclarés, assurances à jour
+                  pour le transport de personnes et de marchandises.
+                </p>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-5 h-5 text-blue-400" />
+                  <span className="font-bold">Réactivité 24h/24</span>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  Astreinte de nuit, gestion des urgences, prises en charge
+                  tôt le matin, tard le soir, week-ends et jours fériés.
+                </p>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <MapPin className="w-5 h-5 text-blue-400" />
+                  <span className="font-bold">Ancrage local</span>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  Une entreprise basée à Orléans, qui connaît le terrain, les
+                  accès, les zones d&apos;activités et les contraintes locales.
+                </p>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Phone className="w-5 h-5 text-blue-400" />
+                  <span className="font-bold">Contact direct</span>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  Pas de plateforme anonyme : une ligne directe et une équipe
+                  disponible pour répondre à vos demandes spécifiques.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
       <footer className="mt-auto">
         <div className="bg-blue-700 text-white py-8 px-6">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
             <div className="flex flex-col">
-              <span className="text-lg font-bold">Une demande précise ? Des conditions particulières ?</span>
-              <span className="text-blue-100 text-sm mt-1">Contactez-nous dès maintenant, réponse immédiate garantie.</span>
+              <span className="text-lg font-bold">
+                Une demande précise ? Des conditions particulières ?
+              </span>
+              <span className="text-blue-100 text-sm mt-1">
+                Contactez-nous dès maintenant, réponse immédiate garantie.
+              </span>
             </div>
             <a
               href="tel:0634605799"
-              className="bg-slate-900 text-white px-8 py-3 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-black transition shadow-lg border border-transparent hover:border-slate-700"
+              className="bg-slate-900 text-white px-8 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-black transition shadow-lg border border-transparent hover:border-slate-700"
             >
-              <Phone className="w-4 h-4 inline mr-2" /> CONTACT RAPIDE
+              <Phone className="w-4 h-4 inline mr-2" />
+              CONTACT RAPIDE
             </a>
           </div>
         </div>
 
-        <div id="contact" className="bg-black text-white py-12 px-6 border-b border-slate-800">
+        <div
+          id="contact"
+          className="bg-black text-white py-12 px-6 border-b border-slate-800"
+        >
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
+              {/* LOGO FOOTER */}
               <div className="flex flex-col leading-none mb-6">
                 <span className="text-xl font-black tracking-tighter text-white">
-                  MAPETRANS <span className="text-blue-700">LD</span>
+                  MAPETRANS <span className="text-blue-700">.LD</span>
                 </span>
                 <span className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">
                   Solutions de Transport
                 </span>
               </div>
               <p className="text-slate-400 text-xs leading-relaxed text-justify">
-                Partenaire expert depuis 2015. Nous assurons vos transports critiques, navettes VIP et déménagements avec une exigence de qualité unique. Licences et assurances à jour.
+                Partenaire expert basé à Orléans. Nous assurons vos transports
+                critiques, navettes VIP et déménagements avec une exigence de
+                qualité unique. Licences et assurances à jour.
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">Nos Services</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">
+                Nos Services
+              </h3>
               <div className="flex flex-col gap-3 text-sm font-medium text-slate-400">
-                <Link href="/agence" className="flex items-center gap-2 hover:text-white transition group">
-                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" /> L'Agence
+                <Link
+                  href="/agence"
+                  className="flex items-center gap-2 hover:text-white transition group"
+                >
+                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" />{" "}
+                  L&apos;Agence
                 </Link>
-                <Link href="/vtc" className="flex items-center gap-2 hover:text-white transition group">
-                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" /> VTC & Chauffeurs
+                <Link
+                  href="/vtc"
+                  className="flex items-center gap-2 hover:text-white transition group"
+                >
+                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" />{" "}
+                  VTC &amp; Chauffeurs
                 </Link>
-                <Link href="/logistique" className="flex items-center gap-2 hover:text-white transition group">
-                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" /> Logistique
+                <Link
+                  href="/logistique"
+                  className="flex items-center gap-2 hover:text-white transition group"
+                >
+                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" />{" "}
+                  Logistique &amp; Fret
                 </Link>
-                <Link href="/demenagement" className="flex items-center gap-2 hover:text-white transition group">
-                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" /> Déménagement & Stockage
+                <Link
+                  href="/demenagement"
+                  className="flex items-center gap-2 hover:text-white transition group"
+                >
+                  <ArrowUpRight className="w-3 h-3 text-blue-700 group-hover:text-white transition" />{" "}
+                  Déménagement
                 </Link>
               </div>
             </div>
 
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">Nous Contacter</h3>
+              <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">
+                Nous Contacter
+              </h3>
               <div className="flex flex-col gap-4 text-sm font-bold">
-                <a href="tel:0634605799" className="flex items-center gap-3 hover:text-blue-400 transition">
+                <a
+                  href="tel:0634605799"
+                  className="flex items-center gap-3 hover:text-blue-400 transition"
+                >
                   <Phone className="w-4 h-4 text-blue-600" /> 06 34 60 57 99
                 </a>
                 <div className="flex items-center gap-3 text-slate-400">
                   <Phone className="w-4 h-4 text-blue-600" /> 09 59 07 04 33
                 </div>
-                <a href="mailto:contact@mapetransld.com" className="flex items-center gap-3 hover:text-blue-400 transition">
+                <a
+                  href="mailto:contact@mapetransld.com"
+                  className="flex items-center gap-3 hover:text-blue-400 transition"
+                >
                   <Mail className="w-4 h-4 text-blue-600" /> contact@mapetransld.com
                 </a>
                 <div className="flex items-center gap-3 text-slate-400 mt-2">
-                  <MapPin className="w-4 h-4 text-blue-600" /> Orléans & France Entière
+                  <MapPin className="w-4 h-4 text-blue-600" /> Orléans &amp;
+                  France Entière
                 </div>
               </div>
             </div>
@@ -619,169 +765,22 @@ export default function Home() {
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 uppercase tracking-wide gap-4">
             <span>Copyright 2025, Mapetrans LD. Tous droits réservés.</span>
             <div className="flex gap-6">
-              <Link href="/mentions-legales" className="hover:text-slate-400 transition">
+              <Link
+                href="/mentions-legales"
+                className="hover:text-slate-400 transition"
+              >
                 Mentions Légales
               </Link>
-              <Link href="/confidentialitegit" className="hover:text-slate-400 transition">
+              <Link
+                href="/confidentialite"
+                className="hover:text-slate-400 transition"
+              >
                 Politique de Confidentialité
               </Link>
             </div>
           </div>
         </div>
       </footer>
-
-      {/* ✅ MODAL “Être rappelé” — style premium cohérent */}
-      {isCallbackOpen && (
-        <div className="fixed inset-0 z-[999] bg-black/70 flex items-center justify-center px-4">
-          <div className="bg-white w-full max-w-lg rounded-lg shadow-2xl border border-slate-200 overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
-              <div className="flex items-center gap-2">
-                <MessageSquare className="w-4 h-4 text-blue-700" />
-                <span className="text-xs font-black uppercase tracking-widest text-slate-700">
-                  Demande de rappel
-                </span>
-              </div>
-              <button
-                onClick={() => setIsCallbackOpen(false)}
-                className="p-2 hover:bg-white rounded-md transition"
-                aria-label="Fermer"
-              >
-                <X className="w-5 h-5 text-slate-600" />
-              </button>
-            </div>
-
-            <div className="px-6 py-6">
-              <p className="text-sm text-slate-600 font-semibold mb-5">
-                Laissez vos coordonnées. Réponse rapide (24/7 si urgence).
-              </p>
-
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-3" onSubmit={async (e) => {
-  e.preventDefault();
-
-  const form = e.currentTarget as any;
-  if (form.__sending) return;
-  form.__sending = true;
-
-  const formEl = e.currentTarget as HTMLFormElement;
-  const fd = new FormData(formEl);
-
-  try {
-    const res = await fetch("/api/leads", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "callback",
-        source: "home",
-        name: fd.get("name"),
-        company: fd.get("company"),
-        phone: fd.get("phone"),
-        email: fd.get("email"),
-        message: fd.get("message"),
-      }),
-    });
-
-    const out = await res.json().catch(() => ({}));
-
-    if (!res.ok || out.ok === false) {
-      alert("❌ Erreur d’envoi. Réessayez ou appelez-nous.");
-      return;
-    }
-
-    alert("✅ Demande envoyée ! Nous vous rappelons rapidement.");
-    setIsCallbackOpen(false);
-    form.reset();
-  } catch {
-    alert("❌ Erreur réseau. Réessayez ou appelez-nous.");
-  }
-
-  form.__sending = false;
-}}>
-                <div className="md:col-span-1">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    Nom *
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    name="name" placeholder="Votre nom"
-                  />
-                </div>
-
-                <div className="md:col-span-1">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    Société
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    name="company" placeholder="Entreprise (optionnel)"
-                  />
-                </div>
-
-                <div className="md:col-span-1">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    Téléphone *
-                  </label>
-                  <input
-                    required
-                    type="tel"
-                    className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    name="phone" placeholder="06 xx xx xx xx"
-                  />
-                </div>
-
-                <div className="md:col-span-1">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    Email
-                  </label>
-                  <input
-                    name="email" type="email"
-                    className="w-full bg-slate-50 h-11 border border-slate-200 rounded-sm px-4 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    placeholder="email@exemple.com"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    Message
-                  </label>
-                  <textarea name="message"
-                    rows={4}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-sm px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:border-blue-600"
-                    placeholder="Expliquez votre besoin (date, trajets, volume, urgence...)"
-                  />
-                </div>
-
-                <div className="md:col-span-2 flex flex-col md:flex-row gap-3 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsCallbackOpen(false)}
-                    className="w-full md:w-1/3 h-11 bg-white border border-slate-200 rounded-sm font-bold uppercase tracking-wide text-xs hover:bg-slate-50 transition"
-                  >
-                    Annuler
-                  </button>
-                  <button
-                    type="submit"
-                    className="w-full md:w-2/3 h-11 bg-blue-700 text-white rounded-sm font-bold uppercase tracking-wide text-xs hover:bg-slate-900 transition shadow-lg"
-                  >
-                    Envoyer la demande
-                  </button>
-                </div>
-
-                <div className="md:col-span-2 mt-1">
-                  <a
-                    href="tel:0634605799"
-                    className="text-[11px] font-black text-blue-700 hover:text-slate-900 transition inline-flex items-center gap-2"
-                  >
-                    <Phone className="w-4 h-4" /> Besoin urgent ? Appeler maintenant
-                  </a>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
