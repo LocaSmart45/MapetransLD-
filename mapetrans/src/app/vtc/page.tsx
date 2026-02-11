@@ -514,7 +514,7 @@ export default function VTCPage() {
               <div className="flex justify-between"><span className="text-sm font-bold text-slate-500">6 à 8 Passagers</span><span className="text-xl font-black text-slate-800">260 €</span></div>
             </div>
           </div>
-          {/* PARIS */}
+          {/* PARIS & GARES PARISIENNES */}
           <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col hover:-translate-y-1 transition duration-300">
             <div className="h-32 bg-blue-900 relative overflow-hidden"><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Paris" /><div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">PARIS</h3><Train className="w-6 h-6" /></div></div>
             <div className="p-6 space-y-4">
