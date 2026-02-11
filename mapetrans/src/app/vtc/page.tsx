@@ -32,7 +32,7 @@ export default function VTCPage() {
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [activeStep, setActiveStep] = useState<1 | 2>(1);
 
-  // --- 1. NOUVEAU : On stocke les données ici pour ne pas les perdre entre les étapes ---
+  // --- 1. MEMOIRE DU FORMULAIRE (State) ---
   const [formData, setFormData] = useState({
     date: "",
     time: "",
@@ -51,7 +51,7 @@ export default function VTCPage() {
     details: ""
   });
 
-  // --- 2. NOUVEAU : Fonction pour mettre à jour les données quand on tape ---
+  // --- 2. GESTION DES CHANGEMENTS (Mise à jour en direct) ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -59,6 +59,7 @@ export default function VTCPage() {
 
   const form = useRef<HTMLFormElement>(null);
 
+  // --- 3. ENVOI DES DONNÉES ---
   const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSending(true);
@@ -66,13 +67,12 @@ export default function VTCPage() {
     // Calcul automatique du véhicule
     const vehiculeAuto = parseInt(formData.passagers) >= 4 ? "Van" : "Berline";
 
-    // --- 3. MODIFIÉ : On utilise 'formData' (mémoire) au lieu de 'fd.get' (HTML) ---
     const data = {
       "Date Demande": new Date().toLocaleString("fr-FR"),
       "Type Trajet": isRoundTrip ? "Aller-Retour" : "Aller Simple",
       "Nom": formData.nom,
       "Prénom": formData.prenom,
-      "Adresse Facturation": "",
+      "Adresse Facturation": "", // Vide volontairement
       "Téléphone": formData.telephone,
       "Email": formData.user_email,
       "Date Aller": formData.date,
@@ -102,7 +102,7 @@ export default function VTCPage() {
 
       if (response.ok) {
         alert("✅ Demande reçue ! Vous allez recevoir votre devis par email très rapidement.");
-        // Reset du formulaire
+        // Remise à zéro
         setFormData({
             date: "", time: "", depart: "", destination: "", vol_train: "",
             date_retour: "", time_retour: "", destination_retour: "", vol_train_retour: "",
@@ -144,9 +144,8 @@ export default function VTCPage() {
     }
   };
 
-  // --- 4. Fonction de validation simple avant de passer à l'étape 2 ---
+  // --- 4. Validation simple avant étape 2 ---
   const goToStep2 = () => {
-    // Vérification basique que les champs obligatoires de l'étape 1 sont remplis
     if(!formData.date || !formData.time || !formData.depart || !formData.destination) {
         alert("Merci de remplir les informations obligatoires du trajet (Date, Heure, Départ, Destination) avant de continuer.");
         return;
@@ -387,7 +386,7 @@ export default function VTCPage() {
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse Dépose Retour (si différente départ)</label>
-                        <input type="text" name="destination_retour" value={formData.destination_retour} onChange={handleChange} placeholder= className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" />
+                        <input type="text" name="destination_retour" value={formData.destination_retour} onChange={handleChange} className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" />
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° Vol / Train Retour</label>
@@ -502,7 +501,8 @@ export default function VTCPage() {
             <div className="h-32 bg-blue-900 relative overflow-hidden"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Orly" /><div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">ORLY</h3><Plane className="w-6 h-6" /></div></div>
             <div className="p-6 space-y-4">
               <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">1 à 3 Passagers</span><span className="text-xl font-black text-slate-800">180 €</span></div>
-              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 8 Passagers</span><span className="text-xl font-black text-slate-800">220 €</span></div>
+              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 6 Passagers</span><span className="text-xl font-black text-slate-800">210 €</span></div>
+              <div className="flex justify-between"><span className="text-sm font-bold text-slate-500">7 à 8 Passagers</span><span className="text-xl font-black text-slate-800">230 €</span></div>
             </div>
           </div>
           {/* ROISSY */}
@@ -510,7 +510,8 @@ export default function VTCPage() {
             <div className="h-32 bg-slate-900 relative overflow-hidden"><img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Roissy" /><div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">ROISSY</h3><Plane className="w-6 h-6" /></div></div>
             <div className="p-6 space-y-4">
               <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">1 à 3 Passagers</span><span className="text-xl font-black text-slate-800">210 €</span></div>
-              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 8 Passagers</span><span className="text-xl font-black text-slate-800">240 €</span></div>
+              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 6 Passagers</span><span className="text-xl font-black text-slate-800">240 €</span></div>
+              <div className="flex justify-between"><span className="text-sm font-bold text-slate-500">6 à 8 Passagers</span><span className="text-xl font-black text-slate-800">260 €</span></div>
             </div>
           </div>
           {/* PARIS */}
@@ -518,7 +519,8 @@ export default function VTCPage() {
             <div className="h-32 bg-blue-900 relative overflow-hidden"><img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Paris" /><div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">PARIS</h3><Train className="w-6 h-6" /></div></div>
             <div className="p-6 space-y-4">
               <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">1 à 3 Passagers</span><span className="text-xl font-black text-slate-800">200 €</span></div>
-              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 8 Passagers</span><span className="text-xl font-black text-slate-800">240 €</span></div>
+              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 6 Passagers</span><span className="text-xl font-black text-slate-800">230 €</span></div>
+              <div className="flex justify-between"><span className="text-sm font-bold text-slate-500">7 à 8 Passagers</span><span className="text-xl font-black text-slate-800">260 €</span></div>
             </div>
           </div>
           {/* BEAUVAIS */}
@@ -526,7 +528,8 @@ export default function VTCPage() {
             <div className="h-32 bg-slate-800 relative overflow-hidden"><img src="https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?q=80&w=800" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Beauvais" /><div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">BEAUVAIS</h3><Plane className="w-6 h-6" /></div></div>
             <div className="p-6 space-y-4">
               <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">1 à 3 Passagers</span><span className="text-xl font-black text-slate-800">300 €</span></div>
-              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 8 Passagers</span><span className="text-xl font-black text-slate-800">350 €</span></div>
+              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 6 Passagers</span><span className="text-xl font-black text-slate-800">340 €</span></div>
+              <div className="flex justify-between"><span className="text-sm font-bold text-slate-500">7 à 8 Passagers</span><span className="text-xl font-black text-slate-800">380 €</span></div>
             </div>
           </div>
           {/* TOURS */}
@@ -534,7 +537,8 @@ export default function VTCPage() {
             <div className="h-32 bg-blue-900 relative overflow-hidden"><img src="https://images.unsplash.com/photo-1473862170180-84427c485aca?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 w-full h-full object-cover opacity-40" alt="Tours" /><div className="absolute inset-0 flex items-center justify-between px-6 text-white"><h3 className="text-2xl font-black uppercase">TOURS</h3><Plane className="w-6 h-6" /></div></div>
             <div className="p-6 space-y-4">
               <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">1 à 3 Passagers</span><span className="text-xl font-black text-slate-800">200 €</span></div>
-              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 8 Passagers</span><span className="text-xl font-black text-slate-800">230 €</span></div>
+              <div className="flex justify-between border-b border-slate-100 pb-2"><span className="text-sm font-bold text-slate-500">4 à 6 Passagers</span><span className="text-xl font-black text-slate-800">220 €</span></div>
+              <div className="flex justify-between"><span className="text-sm font-bold text-slate-500">7 à 8 Passagers</span><span className="text-xl font-black text-slate-800">240 €</span></div>
             </div>
           </div>
           {/* INFOS SUPP */}
