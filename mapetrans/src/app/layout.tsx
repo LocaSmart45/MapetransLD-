@@ -1,7 +1,9 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";          // ✅ AJOUT ICI
+import Script from "next/script";
 import "./globals.css";
+import CookieConsentBanner from "./components/CookieConsentBanner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,17 +14,30 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="fr">
       <head>
-        {/* ✅ Script Google Tag Manager / Ads */}
+        <Script id="consent-default" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              analytics_storage: 'denied'
+            });
+          `}
+        </Script>
+
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17935783791"
           strategy="afterInteractive"
         />
+
         <Script id="gtag-init" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -33,6 +48,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={inter.className}>
+        <CookieConsentBanner />
         {children}
       </body>
     </html>
