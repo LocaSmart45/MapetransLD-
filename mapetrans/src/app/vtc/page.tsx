@@ -387,7 +387,7 @@ export default function VTCPage() {
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Adresse Dépose Retour (si différente départ)</label>
-                        <input type="text" name="destination_retour" value={formData.destination_retour} onChange={handleChange} placeholder="Laisser vide si retour au point de départ" className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" />
+                        <input type="text" name="destination_retour" value={formData.destination_retour} onChange={handleChange} placeholder= className="w-full h-10 border border-slate-300 rounded-sm px-3 text-sm font-medium focus:border-blue-600 outline-none bg-white" />
                       </div>
                       <div>
                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">N° Vol / Train Retour</label>
