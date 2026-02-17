@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+
 // Modes du hero (VTC / Transport / Déménagement)
 const MODES = [
   {
@@ -648,6 +649,24 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* === BANDEAU PARTENAIRES === */}
+      {/* === BANDEAU PARTENAIRES === */}
+      <section className="border-t border-b border-slate-100 bg-white py-10">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] mb-8">Ils nous font confiance</p>
+          <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
+            {[
+              { nom: "FedEx", logo: "/logos/FedEx.png", width: "w-24" },
+              { nom: "Darty", logo: "/logos/Darty.png", width: "w-20" },
+              { nom: "LOreal", logo: "/logos/Loreal.png", width: "w-24" },
+              { nom: "Servier", logo: "/logos/Servier.png", width: "w-28" },
+            ].map((p) => (
+              <img key={p.nom} src={p.logo} alt={p.nom} className={`${p.width} object-contain grayscale opacity-40 hover:opacity-80 hover:grayscale-0 transition-all duration-300`} />
+            ))}
           </div>
         </div>
       </section>
