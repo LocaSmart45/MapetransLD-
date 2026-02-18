@@ -89,32 +89,73 @@ export default function VTCPage() {
     }
   };
 
+  // ✅ SEO: FAQ enrichie (1 seul schema FAQPage, 8 questions)
   const schemaFAQ = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "Réalisez-vous des courses express ou urgentes ?",
+        "name": "Le prix est-il fixe ? Qu’est-ce qui est inclus ?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Oui, les courses express sont au cœur de notre métier. Contactez-nous immédiatement au 06 34 60 57 99 pour vérifier la disponibilité d'un chauffeur en urgence."
+          "text": "Oui, le tarif est fixé à l’avance. Il inclut le véhicule privatisé, le chauffeur, les bagages standards et le trajet convenu (sans surprise liée au trafic)."
         }
       },
       {
         "@type": "Question",
-        "name": "Quels sont les tarifs pour Orly ou Roissy ?",
+        "name": "Quels sont les tarifs Orléans → Orly / Roissy ?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Nos forfaits démarrent à 180€ pour Orly et 210€ pour Roissy CDG. Le tarif est fixe, bagages compris, peu importe la circulation."
+          "text": "Nos forfaits démarrent à 180€ pour Orly et 210€ pour Roissy CDG (prix fixe). Le tarif dépend du nombre de passagers et des conditions (nuit/fériés)."
         }
       },
       {
         "@type": "Question",
-        "name": "Desservez-vous les Gares Parisiennes ?",
+        "name": "Que se passe-t-il en cas de retard avion ou train ?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Oui, nous assurons fréquemment la liaison Orléans vers Paris Austerlitz, Montparnasse ou Gare de Lyon pour vos correspondances TGV."
+          "text": "L’attente est gratuite jusqu’à 35 minutes, puis facturée 30€/heure (selon conditions). Nous suivons votre arrivée quand un numéro de vol/train est fourni."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Peut-on réserver en urgence (départ rapide) ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui, nous traitons les demandes urgentes selon disponibilité. Le plus rapide est d’appeler directement au 06 34 60 57 99."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Proposez-vous des prestations VIP / hôtels / châteaux / multi-arrêts ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui. Nous assurons des prestations VIP (hôtels, domaines, châteaux, restaurants) avec itinéraires sur mesure et possibilité de multi-arrêts."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Acceptez-vous les entreprises (facturation / contrat / compte pro) ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui. Nous proposons la facturation mensuelle, un suivi des missions et des conditions adaptées aux besoins récurrents (entreprises, hôtels, agences)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Puis-je modifier ou annuler une réservation ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui. Contactez-nous dès que possible pour modifier ou annuler. Nous faisons le maximum pour nous adapter, surtout sur les vols et horaires."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Équipements & besoins spécifiques : siège bébé, animaux, bagages volumineux ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Oui, sur demande. Indiquez vos besoins dans le formulaire (siège bébé, animal, bagages volumineux, contraintes d’accès…)."
         }
       }
     ]
@@ -371,34 +412,101 @@ export default function VTCPage() {
         {/* FAQ */}
         <div className="max-w-3xl mx-auto mb-16">
           <h2 className="text-2xl font-black text-slate-900 uppercase text-center mb-8">Questions Fréquentes</h2>
-          <div className="space-y-4">
-            <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
-              <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
-                Réalisez-vous des courses express ou urgentes ?
-                <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
-              </summary>
-              <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
-                Oui, les courses express sont au cœur de notre métier. Contactez-nous immédiatement au 06 34 60 57 99 pour vérifier la disponibilité d'un chauffeur en urgence.
-              </div>
-            </details>
-            <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
-              <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
-                Quels sont les tarifs pour Orly ou Roissy ?
-                <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
-              </summary>
-              <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
-                Nos forfaits démarrent à 180€ pour Orly et 210€ pour Roissy CDG. Le tarif est fixe, bagages compris, peu importe la circulation.
-              </div>
-            </details>
-            <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
-              <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
-                Desservez-vous les Gares Parisiennes ?
-                <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
-              </summary>
-              <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
-                Oui, nous assurons fréquemment la liaison Orléans vers Paris Austerlitz, Montparnasse ou Gare de Lyon pour vos correspondances TGV.
-              </div>
-            </details>
+
+          {/* ✅ Bloc 1 : Navette Aéroport */}
+          <div className="mb-8">
+            <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4 text-center">
+              Navette Aéroport
+            </h3>
+            <div className="space-y-4">
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Le prix est-il fixe ? Qu’est-ce qui est inclus ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  Oui, le tarif est fixé à l’avance. Il inclut le véhicule privatisé, le chauffeur, les bagages standards et le trajet convenu (sans surprise liée au trafic).
+                </div>
+              </details>
+
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Quels sont les tarifs Orléans → Orly / Roissy ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  Nos forfaits démarrent à 180€ pour Orly et 210€ pour Roissy CDG (prix fixe). Le tarif dépend du nombre de passagers et des conditions (nuit/fériés).
+                </div>
+              </details>
+
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Que se passe-t-il en cas de retard avion ou train ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  L’attente est gratuite jusqu’à 35 minutes, puis facturée 30€/heure (selon conditions). Nous suivons votre arrivée quand un numéro de vol/train est fourni.
+                </div>
+              </details>
+
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Peut-on réserver en urgence (départ rapide) ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  Oui, nous traitons les demandes urgentes selon disponibilité. Le plus rapide est d’appeler directement au 06 34 60 57 99.
+                </div>
+              </details>
+            </div>
+          </div>
+
+          {/* ✅ Bloc 2 : Pro & VIP */}
+          <div>
+            <h3 className="text-sm font-black uppercase tracking-widest text-slate-500 mb-4 text-center">
+              Pro & VIP
+            </h3>
+            <div className="space-y-4">
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Proposez-vous des prestations VIP / hôtels / châteaux / multi-arrêts ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  Oui. Nous assurons des prestations VIP (hôtels, domaines, châteaux, restaurants) avec itinéraires sur mesure et possibilité de multi-arrêts.
+                </div>
+              </details>
+
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Acceptez-vous les entreprises (facturation / contrat / compte pro) ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  Oui. Nous proposons la facturation mensuelle, un suivi des missions et des conditions adaptées aux besoins récurrents (entreprises, hôtels, agences).
+                </div>
+              </details>
+
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Puis-je modifier ou annuler une réservation ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  Oui. Contactez-nous dès que possible pour modifier ou annuler. Nous faisons le maximum pour nous adapter, surtout sur les vols et horaires.
+                </div>
+              </details>
+
+              <details className="group bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <summary className="flex justify-between items-center p-4 font-bold cursor-pointer hover:bg-slate-50">
+                  Équipements & besoins spécifiques : siège bébé, animaux, bagages volumineux ?
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition" />
+                </summary>
+                <div className="p-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+                  Oui, sur demande. Indiquez vos besoins dans le formulaire (siège bébé, animal, bagages volumineux, contraintes d’accès…).
+                </div>
+              </details>
+            </div>
           </div>
         </div>
       </div>
