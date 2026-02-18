@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "VTC à Orléans | Chauffeur privé 24h/24 | Mapetrans LD",
+  title: "Navette Aéroport Orléans | Orly & Roissy | Chauffeur Privé 24h/24",
   description:
-    "Chauffeur VTC à Orléans et dans le Loiret. Navettes aéroports, gares, déplacements pro et courses longue distance 24h/24. Réservation rapide, prix clair.",
+    "Navette aéroport depuis Orléans : transferts privés vers Orly & Roissy CDG (prix fixe), gares parisiennes et longue distance. Chauffeur premium 24h/24 – 7j/7. Devis rapide.",
   keywords: [
-    "vtc orléans",
-    "chauffeur privé orléans",
-    "chauffeur vtc loiret",
-    "vtc loiret",
-    "transport privé orléans",
     "navette aéroport orléans",
-    "vtc gare orléans",
+    "navette orléans orly",
+    "navette orléans roissy",
+    "transfert aéroport orléans",
+    "chauffeur privé orléans",
+    "vtc aéroport orléans",
+    "navette gares parisiennes",
+    "chauffeur longue distance orléans",
   ],
   alternates: { canonical: "https://www.mapetransld.com/vtc" },
   openGraph: {
-    title: "VTC à Orléans | Chauffeur privé 24h/24 | Mapetrans LD",
+    title: "Navette Aéroport Orléans | Orly & Roissy | Chauffeur Privé 24h/24",
     description:
-      "Service VTC premium à Orléans : aéroports, gares, déplacements professionnels et urgences 24h/24.",
+      "Transferts privés depuis Orléans vers Orly & Roissy CDG. Chauffeur premium 24h/24 – 7j/7, prix fixe et devis rapide.",
     url: "https://www.mapetransld.com/vtc",
     siteName: "Mapetrans LD",
     locale: "fr_FR",
