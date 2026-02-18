@@ -7,9 +7,9 @@ import BookingForm from "./BookingForm";
 export default function VTCPage() {
   const schemaLocalBusiness = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Mapetrans LD - VTC & Navettes Aéroport Orléans",
-    "description": "Chauffeur VTC privé à Orléans. Navettes aéroport Orly dès 180€, Roissy CDG dès 210€. Service 24h/24 7j/7 depuis tout le Loiret.",
+    "@type": ["LocalBusiness", "TransportationService"],
+    "name": "Navette Aéroport & VTC depuis Orléans",
+    "description": "Navette Aéroport et Chauffeur VTC privé à Orléans. Navettes aéroport Orly dès 180€, Roissy CDG dès 210€. Service 24h/24 7j/7 depuis tout le Loiret.",
     "url": "https://www.mapetransld.com/vtc",
     "telephone": "+33634605799",
     "email": "contact@mapetransld.com",
