@@ -151,12 +151,12 @@ export default function VTCPage() {
             Aéroport • Gares • Urgences
           </span>
           <h1 className="text-3xl md:text-6xl font-black text-white uppercase tracking-tight mb-6 drop-shadow-lg">
-            VTC à Orléans <br />
-            <span className="text-blue-500">Navettes Aéroports & Transport Prioritaire</span>
+             Navette Aéroport depuis Orléans <br />
+            <span className="text-blue-500">Chauffeur privé longue distance • Orly • Roissy</span>
           </h1>
           <p className="text-slate-200 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-md">
-            Chauffeur VTC à Orléans et dans tout le Loiret pour vos navettes aéroports (Orly, Roissy), gares parisiennes et <strong>courses express</strong>. <br />
-            Service disponible 24h/24 et 7j/7 avec prix fixe garanti.
+            Spécialiste de la navette aéroport depuis Orléans et tout le Loiret : transferts vers Orly, Roissy CDG, Beauvais et gares parisiennes. <br />
+            Service 24h/24 et 7j/7 avec chauffeur privé longue distance et prix fixe garanti.
           </p>
           <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center items-center">
             <a
