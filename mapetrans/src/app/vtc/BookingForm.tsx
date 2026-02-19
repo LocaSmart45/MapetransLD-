@@ -6,6 +6,27 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+// --- Tracking Google Ads conversion "Envoi de formulaire de lead" ---
+
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
+function trackVtcConversion() {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", "conversion", {
+      send_to: "AW-17935783791/e0tiCKPsrPsbEO-uuehC",
+      value: 1.0,
+      currency: "EUR",
+    });
+  } else {
+    console.warn("gtag non disponible – conversion non trackée");
+  }
+}
+// -------------------------------------------------------------------
+
 // ============================================================
 // ✅ CONFIGURATION : TON LIEN MAKE
 // ============================================================
@@ -95,6 +116,10 @@ export default function BookingForm() {
 
       if (response.ok) {
         alert("✅ Demande reçue ! Vous allez recevoir votre devis par email très rapidement.");
+
+        // 👉 Conversion Google Ads : réservation VTC
+        trackVtcConversion();
+
         setFormData({
           date: "", time: "", depart: "", destination: "", vol_train: "",
           date_retour: "", time_retour: "", destination_retour: "", vol_train_retour: "",
@@ -207,7 +232,7 @@ export default function BookingForm() {
                   MAPETRANS <span className="text-blue-700">LD</span>
                 </span>
               </Link>
-              <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
+              <span className="text-[8px] md:text[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
                 Solutions de Transport
               </span>
             </div>
