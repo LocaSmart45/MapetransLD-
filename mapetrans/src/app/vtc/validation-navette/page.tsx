@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function ValidationNavettePage() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-
   useEffect(() => {
+    // On ne fait ça que côté navigateur
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
     if (!id) return;
 
     fetch("https://hook.eu1.make.com/jvtjryr41f7ibo7gj3iex3bsf09buolv", {
@@ -23,7 +25,7 @@ export default function ValidationNavettePage() {
       .catch((err) => {
         console.error("Erreur webhook :", err);
       });
-  }, [id]);
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
@@ -38,9 +40,7 @@ export default function ValidationNavettePage() {
         </p>
 
         <div className="bg-slate-100 rounded-lg p-4 mb-6 text-sm text-slate-600">
-          <p className="font-semibold mb-2">
-            Prochaines étapes :
-          </p>
+          <p className="font-semibold mb-2">Prochaines étapes :</p>
           <ul className="space-y-1">
             <li>• Vérification et affectation du chauffeur</li>
             <li>• SMS envoyé avant la prise en charge</li>
