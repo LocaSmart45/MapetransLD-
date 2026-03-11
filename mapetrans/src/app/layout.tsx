@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "MAPETRANS LD - Transport & Logistique",
-  description: "Transport de personnes et fret express France & Europe.",
+  description: "Chauffeur privé VTC, navettes aéroport, logistique et déménagement à Orléans. MAPETRANS LD, disponible 24h/24. Devis gratuit.",
 };
 
 export default function RootLayout({
