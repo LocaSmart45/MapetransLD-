@@ -1,14 +1,52 @@
 "use client";
 
-import React, { useState } from 'react';
-import { CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, ArrowUpRight, ShieldCheck, Smile, Package, Home } from 'lucide-react';
+import React from 'react';
+import { MapPin, Phone, Mail, ArrowUpRight, ShieldCheck, Smile, Package, Home, Box, CheckCircle, X } from 'lucide-react';
 import Link from 'next/link';
+import NavHeader from '@/app/components/NavHeader';
 
 export default function DemenagementPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const schemaOrg = {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "MovingCompany"],
+    "name": "MAPETRANS LD — Déménagement & Garde-meubles",
+    "description": "Déménagement particuliers et entreprises à Orléans et dans le Loiret. Service de garde-meubles, emballage, montage meubles. Devis gratuit.",
+    "url": "https://www.mapetransld.com/demenagement",
+    "telephone": "+33634605799",
+    "email": "contact@mapetransld.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "105 Route Nationale 20",
+      "addressLocality": "Cercottes",
+      "addressRegion": "Centre-Val de Loire",
+      "postalCode": "45520",
+      "addressCountry": "FR"
+    },
+    "areaServed": [
+      { "@type": "City", "name": "Orléans" },
+      { "@type": "AdministrativeArea", "name": "Loiret" },
+      { "@type": "Country", "name": "France" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services Déménagement",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Déménagement particuliers Orléans", "description": "Déménagement clé en main pour particuliers en Loiret et Centre-Val de Loire." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Déménagement entreprises", "description": "Transfert de bureaux, équipements et archives pour professionnels." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Garde-meubles & stockage", "description": "Stockage sécurisé de vos biens mobiliers sur courte ou longue durée." } }
+      ]
+    }
+  };
 
   return (
-    <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[120px] flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
+      />
+      <NavHeader ctaLabel="Devis Gratuit" ctaHref="#contact-hub" topBarRight="Déménagement Particuliers & Bureaux" />
+      <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[120px] flex flex-col">
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -27,84 +65,6 @@ export default function DemenagementPage() {
       </div>
 
       {/* === HEADER === */}
-      <header className="fixed top-0 w-full z-50 shadow-sm bg-white transition-all duration-300">
-        <div className="bg-slate-900 text-slate-300 h-9 md:h-10 flex items-center justify-between text-[9px] md:text-[11px] font-medium tracking-wide uppercase px-4 overflow-hidden whitespace-nowrap">
-          <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
-            <Clock className="w-3 h-3 text-blue-400" />
-            <span className="text-white font-bold">Devis sous 24h</span>
-          </div>
-          <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
-            <CheckCircle className="w-3 h-3 text-green-400" />
-            <span className="hidden md:inline">Particuliers & Bureaux</span>
-            <span className="md:hidden">Déménagement Pro</span>
-          </div>
-        </div>
-
-        <nav className="border-b border-slate-200 h-20 md:h-24 flex items-center relative bg-white z-50">
-          <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center gap-4">
-            <div className="flex flex-col leading-none cursor-pointer group pr-2 shrink-0">
-              <Link href="/">
-                <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 whitespace-nowrap">
-                  MAPETRANS <span className="text-blue-700">LD</span>
-                </span>
-              </Link>
-              <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
-                Solutions de Transport
-              </span>
-            </div>
-            
-            <div className="hidden xl:flex items-center text-[10px] font-extrabold text-slate-600 tracking-widest uppercase">
-              <Link href="/agence" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> L'Agence
-              </Link>
-              <Link href="/vtc" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Users className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> VTC & Chauffeurs
-              </Link>
-              <Link href="/logistique" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Truck className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> Logistique & Fret
-              </Link>
-              <Link href="/demenagement" className="text-blue-700 px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Box className="w-4 h-4 text-blue-700" /> Déménagement
-              </Link>
-              <Link href="/contact" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group">
-                <MessageSquare className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> Contact
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-3 md:gap-4">
-              <a href="tel:0634605799" className="xl:hidden flex items-center gap-2 bg-blue-700 text-white px-3 py-2 rounded-sm shadow-md hover:bg-blue-800 transition">
-                <Phone className="w-3 h-3" /> <span className="text-[10px] font-black tracking-wider">06 34 60 57 99</span>
-              </a>
-              <div className="hidden xl:flex items-center gap-6 pl-6">
-                <div className="flex flex-col items-end text-right">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Besoin d'un tarif ?</span>
-                  <a href="tel:0634605799" className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono whitespace-nowrap">
-                    06 34 60 57 99
-                  </a>
-                </div>
-                <Link href="#contact-hub" className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-sm font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase">
-                  Devis Gratuit
-                </Link>
-              </div>
-              <button className="xl:hidden p-1 text-slate-800" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 top-28 z-40 bg-white border-t border-slate-100 p-6 flex flex-col gap-6 xl:hidden overflow-y-auto pb-32">
-            <div className="flex flex-col gap-4 text-sm font-black uppercase tracking-wider text-slate-800">
-              <Link href="/agence" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Building2 className="w-5 h-5 text-blue-700" /> L'Agence</Link>
-              <Link href="/vtc" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Users className="w-5 h-5 text-blue-700" /> VTC & Chauffeurs</Link>
-              <Link href="/logistique" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Truck className="w-5 h-5 text-blue-700" /> Logistique & Fret</Link>
-              <Link href="/demenagement" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Box className="w-5 h-5 text-blue-700" /> Déménagement</Link>
-              <Link href="/contact" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><MessageSquare className="w-5 h-5 text-blue-700" /> Contact</Link>
-            </div>
-          </div>
-        )}
-      </header>
 
       {/* === HERO DÉMÉNAGEMENT === */}
       <div className="relative h-[450px] w-full overflow-hidden flex items-center justify-center bg-slate-900">
@@ -262,6 +222,101 @@ export default function DemenagementPage() {
 
       </div>
 
+      {/* === SECTION SEO — CONTENU ÉDITORIAL === */}
+      <section className="max-w-4xl mx-auto px-4 py-16 w-full">
+        <h2 className="text-3xl font-black text-slate-900 mb-6">
+          Déménagement à Orléans et dans le Loiret — MAPETRANS LD
+        </h2>
+        <p className="text-slate-600 leading-relaxed mb-6">
+          <strong>MAPETRANS LD</strong> est une société de déménagement basée dans l&apos;agglomération
+          orléanaise, active depuis 2013. Nous réalisons des déménagements pour les particuliers
+          et les entreprises dans tout le <strong>Loiret (45)</strong>, en région Centre-Val de Loire
+          et sur l&apos;ensemble du territoire national.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Déménagement particuliers à Orléans et dans le Loiret
+        </h3>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          Que vous déménagiez d&apos;un studio à Fleury-les-Aubrais ou d&apos;une maison familiale à Olivet,
+          nos équipes prennent en charge l&apos;intégralité de votre déménagement. Emballage, protection
+          des meubles, chargement, transport et livraison avec montage : nous adaptons notre intervention
+          à vos besoins et à votre budget.
+        </p>
+        <p className="text-slate-600 leading-relaxed mb-6">
+          Nous intervenons dans toutes les communes de l&apos;agglomération orléanaise : Orléans,
+          Saran, Saint-Jean-de-Braye, La Chapelle-Saint-Mesmin, Saint-Jean-de-la-Ruelle, Ingré,
+          Olivet, Chécy, et au-delà dans tout le département.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Déménagement d&apos;entreprise — transfert de bureaux
+        </h3>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          Le <strong>déménagement d&apos;entreprise</strong> exige une organisation rigoureuse pour minimiser
+          l&apos;interruption d&apos;activité. MAPETRANS LD planifie votre transfert de bureaux en dehors
+          des heures ouvrées si nécessaire : déménagement le week-end, déplacement d&apos;archives,
+          transport de matériel informatique sécurisé, signalétique et mobilier de bureau.
+        </p>
+        <p className="text-slate-600 leading-relaxed mb-6">
+          Nous avons accompagné des PME et des filiales de grands groupes dans leurs relocalisations
+          au sein du Loiret et en Île-de-France.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Garde-meubles & stockage sécurisé
+        </h3>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          Vous avez besoin de stocker vos meubles pendant des travaux, une transition de logement ou
+          une expatriation ? MAPETRANS LD vous propose un service de <strong>garde-meubles à Orléans</strong>
+          avec stockage sécurisé, accessible sur rendez-vous, pour des durées courtes ou longues.
+          Vos biens sont couverts par notre assurance Ad Valorem pendant toute la durée du stockage.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Pourquoi choisir MAPETRANS LD pour votre déménagement ?
+        </h3>
+        <ul className="space-y-3 mb-8">
+          {[
+            "Devis gratuit sous 24h — visite physique ou visio selon votre préférence",
+            "Équipes formées et expérimentées, respectueuses de votre domicile",
+            "Assurance Ad Valorem incluse : vos biens couverts à leur valeur réelle",
+            "3 formules adaptées à tous les budgets : Éco, Standard et Confort",
+            "Matériel de protection fourni : cartons, adhésifs, penderies, couvertures",
+            "Depuis 2013 : des centaines de déménagements réalisés dans le Loiret",
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-3 text-slate-700">
+              <span className="text-blue-700 shrink-0 mt-0.5">✓</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6">
+          <p className="font-bold text-blue-900 mb-2">
+            Vous préparez un déménagement à Orléans ou dans le Loiret ?
+          </p>
+          <p className="text-blue-800 text-sm mb-4">
+            Appelez-nous pour une estimation immédiate ou demandez une visite technique gratuite.
+            Devis détaillé garanti sous 24h.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="tel:0634605799"
+              className="inline-flex items-center gap-2 bg-blue-700 text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-800 transition"
+            >
+              📞 06 34 60 57 99
+            </a>
+            <a
+              href="mailto:contact@mapetransld.com"
+              className="inline-flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-50 transition"
+            >
+              ✉ contact@mapetransld.com
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer className="mt-auto">
         <div className="bg-blue-700 text-white py-8 px-6">
@@ -315,5 +370,6 @@ export default function DemenagementPage() {
       </footer>
 
     </main>
+    </>
   );
 }

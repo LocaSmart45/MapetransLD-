@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import CookieConsentBanner from "./components/CookieConsentBanner";
+import StickyCallButton from "./components/StickyCallButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,9 +48,10 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} pb-16 md:pb-0`}>
         <CookieConsentBanner />
         {children}
+        <StickyCallButton />
       </body>
     </html>
   );

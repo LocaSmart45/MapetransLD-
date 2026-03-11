@@ -1,14 +1,58 @@
 "use client";
 
-import React, { useState } from 'react';
-import { CheckCircle, Clock, MapPin, Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, Mail, ArrowUpRight, ShieldCheck, Zap, FileText } from 'lucide-react';
+import React from 'react';
+import { MapPin, Truck, Clock, Phone, Mail, ArrowUpRight, ShieldCheck, Zap, FileText } from 'lucide-react';
 import Link from 'next/link';
+import NavHeader from '@/app/components/NavHeader';
 
 export default function LogistiquePage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const schemaOrg = {
+    "@context": "https://schema.org",
+    "@type": ["LocalBusiness", "MovingCompany"],
+    "name": "MAPETRANS LD — Logistique & Fret",
+    "description": "Transport express, fret routier et logistique B2B depuis Orléans. Coursier urgence, affrètement national et européen, Loiret et Centre-Val de Loire.",
+    "url": "https://www.mapetransld.com/logistique",
+    "telephone": "+33634605799",
+    "email": "contact@mapetransld.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "105 Route Nationale 20",
+      "addressLocality": "Cercottes",
+      "addressRegion": "Centre-Val de Loire",
+      "postalCode": "45520",
+      "addressCountry": "FR"
+    },
+    "areaServed": [
+      { "@type": "City", "name": "Orléans" },
+      { "@type": "AdministrativeArea", "name": "Loiret" },
+      { "@type": "Country", "name": "France" }
+    ],
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services Logistique & Fret",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport express Orléans", "description": "Coursier et transport urgent en Loiret et Centre-Val de Loire." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Affrètement national & européen", "description": "Solutions de fret routier France et Europe." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Logistique B2B", "description": "Gestion des flux pour entreprises, sous-traitance transport." } }
+      ]
+    }
+  };
 
   return (
-    <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[120px] flex flex-col">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaOrg) }}
+      />
+      <NavHeader ctaLabel="Demande de Cotation" ctaHref="#contact-hub" topBarRight="Transport Urgent & Affrètement" />
+      <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[120px] flex flex-col">
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
@@ -27,84 +71,6 @@ export default function LogistiquePage() {
       </div>
 
       {/* === HEADER === */}
-      <header className="fixed top-0 w-full z-50 shadow-sm bg-white transition-all duration-300">
-        <div className="bg-slate-900 text-slate-300 h-9 md:h-10 flex items-center justify-between text-[9px] md:text-[11px] font-medium tracking-wide uppercase px-4 overflow-hidden whitespace-nowrap">
-          <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
-            <Clock className="w-3 h-3 text-blue-400" />
-            <span className="text-white font-bold">Exploitation 24h/24 7j/7</span>
-          </div>
-          <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
-            <CheckCircle className="w-3 h-3 text-green-400" />
-            <span className="hidden md:inline">Transport Urgent & Affrètement</span>
-            <span className="md:hidden">Service Urgent</span>
-          </div>
-        </div>
-
-        <nav className="border-b border-slate-200 h-20 md:h-24 flex items-center relative bg-white z-50">
-          <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center gap-4">
-            <div className="flex flex-col leading-none cursor-pointer group pr-2 shrink-0">
-              <Link href="/">
-                <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 whitespace-nowrap">
-                  MAPETRANS <span className="text-blue-700">LD</span>
-                </span>
-              </Link>
-              <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
-                Solutions de Transport
-              </span>
-            </div>
-            
-            <div className="hidden xl:flex items-center text-[10px] font-extrabold text-slate-600 tracking-widest uppercase">
-              <Link href="/agence" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> L'Agence
-              </Link>
-              <Link href="/vtc" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Users className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> VTC & Chauffeurs
-              </Link>
-              <Link href="/logistique" className="text-blue-700 px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Truck className="w-4 h-4 text-blue-700" /> Logistique & Fret
-              </Link>
-              <Link href="/demenagement" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Box className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> Déménagement
-              </Link>
-              <Link href="/contact" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group">
-                <MessageSquare className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> Contact
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-3 md:gap-4">
-              <a href="tel:0634605799" className="xl:hidden flex items-center gap-2 bg-blue-700 text-white px-3 py-2 rounded-sm shadow-md hover:bg-blue-800 transition">
-                <Phone className="w-3 h-3" /> <span className="text-[10px] font-black tracking-wider">06 34 60 57 99</span>
-              </a>
-              <div className="hidden xl:flex items-center gap-6 pl-6">
-                <div className="flex flex-col items-end text-right">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Service Exploitation</span>
-                  <a href="tel:0634605799" className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition cursor-pointer font-mono whitespace-nowrap">
-                    06 34 60 57 99
-                  </a>
-                </div>
-                <Link href="#contact-hub" className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-sm font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase">
-                  Demande de Cotation
-                </Link>
-              </div>
-              <button className="xl:hidden p-1 text-slate-800" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 top-28 z-40 bg-white border-t border-slate-100 p-6 flex flex-col gap-6 xl:hidden overflow-y-auto pb-32">
-            <div className="flex flex-col gap-4 text-sm font-black uppercase tracking-wider text-slate-800">
-              <Link href="/agence" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Building2 className="w-5 h-5 text-blue-700" /> L'Agence</Link>
-              <Link href="/vtc" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Users className="w-5 h-5 text-blue-700" /> VTC & Chauffeurs</Link>
-              <Link href="/logistique" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Truck className="w-5 h-5 text-blue-700" /> Logistique & Fret</Link>
-              <Link href="/demenagement" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Box className="w-5 h-5 text-blue-700" /> Déménagement</Link>
-              <Link href="/contact" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><MessageSquare className="w-5 h-5 text-blue-700" /> Contact</Link>
-            </div>
-          </div>
-        )}
-      </header>
 
       {/* === HERO LOGISTIQUE === */}
       <div className="relative h-[450px] w-full overflow-hidden flex items-center justify-center bg-slate-900">
@@ -280,6 +246,106 @@ export default function LogistiquePage() {
 
       </div>
 
+      {/* === SECTION SEO — CONTENU ÉDITORIAL === */}
+      <section className="max-w-4xl mx-auto px-4 py-16 w-full">
+        <h2 className="text-3xl font-black text-slate-900 mb-6">
+          Transport express et logistique à Orléans — MAPETRANS LD
+        </h2>
+        <p className="text-slate-600 leading-relaxed mb-6">
+          Basée à Cercottes, dans l&apos;agglomération orléanaise, <strong>MAPETRANS LD</strong> est votre
+          prestataire de transport express et de logistique en Loiret depuis 2013. Nous intervenons
+          pour les entreprises, les industriels, les artisans et les e-commerçants qui ont besoin d&apos;un
+          service réactif, fiable et traçable — qu&apos;il s&apos;agisse d&apos;un coursier urgence ou d&apos;un
+          affrètement national complet.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Transport express Orléans & Loiret
+        </h3>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          Notre service de <strong>transport express depuis Orléans</strong> est conçu pour répondre aux
+          besoins urgents : rupture de stock, pièce détachée critique, document confidentiel, colis
+          hors-gabarit. Nos véhicules — du véhicule léger au porteur 19 tonnes — partent dans les
+          2 heures suivant votre appel, 24h/24 et 7j/7.
+        </p>
+        <p className="text-slate-600 leading-relaxed mb-6">
+          Nous desservons l&apos;ensemble du <strong>département du Loiret (45)</strong> : Orléans, Saran,
+          Fleury-les-Aubrais, Olivet, Gien, Pithiviers, Montargis, Beaugency, mais aussi toute la
+          région Centre-Val de Loire et la France entière.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Affrètement & lots complets (FTL / LTL)
+        </h3>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          Pour vos expéditions planifiées, MAPETRANS LD propose des solutions d&apos;<strong>affrètement national
+          et européen</strong> : lots partiels (LTL) pour optimiser les coûts, lots complets (FTL) pour
+          les volumes importants. Nos semi-remorques 44 tonnes et porteurs 19 tonnes couvrent les
+          principales zones industrielles françaises et les corridors logistiques européens.
+        </p>
+        <p className="text-slate-600 leading-relaxed mb-6">
+          Chaque expédition bénéficie d&apos;un <strong>suivi en temps réel</strong> et d&apos;une assurance
+          Ad Valorem. Votre interlocuteur unique chez MAPETRANS LD gère l&apos;enlèvement, le transport
+          et la livraison, avec un bon de livraison signé à chaque étape.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Logistique B2B — sous-traitance & récurrences
+        </h3>
+        <p className="text-slate-600 leading-relaxed mb-4">
+          MAPETRANS LD est le partenaire logistique de plusieurs grandes entreprises du Loiret et de
+          la région. Des clients comme <strong>L&apos;Oréal, FedEx, Darty ou Servier</strong> nous font confiance
+          pour leurs flux récurrents. Nous proposons des contrats de sous-traitance avec tarifs
+          dégressifs, facturation mensuelle et reporting mensuel.
+        </p>
+        <p className="text-slate-600 leading-relaxed mb-6">
+          Vous cherchez un <strong>prestataire transport à Orléans</strong> pour externaliser une partie
+          de votre chaîne logistique ? Contactez-nous pour étudier votre cahier des charges et
+          recevoir une proposition tarifaire sous 48h.
+        </p>
+
+        <h3 className="text-xl font-black text-slate-900 mb-4 mt-10">
+          Nos atouts — pourquoi nous choisir ?
+        </h3>
+        <ul className="space-y-3 mb-8">
+          {[
+            "Réactivité : départ en moins de 2h pour les urgences, disponible 24h/24 et 7j/7",
+            "Traçabilité : suivi GPS en temps réel, bon de livraison numérique",
+            "Assurance : couverture Ad Valorem sur toutes les marchandises transportées",
+            "Flotte complète : véhicule léger, fourgon 20m³, porteur 19T, semi 44T",
+            "Interlocuteur unique : un numéro, une personne, une solution",
+            "Depuis 2013 : expérience éprouvée au service des industriels du Loiret",
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-3 text-slate-700">
+              <span className="text-blue-700 shrink-0 mt-0.5">✓</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className="bg-blue-50 border border-blue-100 rounded-2xl p-6">
+          <p className="font-bold text-blue-900 mb-2">Besoin d&apos;un devis transport express depuis Orléans ?</p>
+          <p className="text-blue-800 text-sm mb-4">
+            Appelez directement notre exploitation ou envoyez-nous votre demande par email.
+            Réponse garantie sous 30 minutes en heures ouvrées, 24h/24 pour les urgences.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="tel:0634605799"
+              className="inline-flex items-center gap-2 bg-blue-700 text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-800 transition"
+            >
+              📞 06 34 60 57 99
+            </a>
+            <a
+              href="mailto:contact@mapetransld.com"
+              className="inline-flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-50 transition"
+            >
+              ✉ contact@mapetransld.com
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer className="mt-auto">
         <div className="bg-blue-700 text-white py-8 px-6">
@@ -333,5 +399,6 @@ export default function LogistiquePage() {
       </footer>
 
     </main>
+    </>
   );
 }

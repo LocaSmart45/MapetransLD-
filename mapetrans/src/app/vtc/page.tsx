@@ -2,6 +2,7 @@ import {
   CheckCircle, Moon, Calendar, Info, Briefcase, Plane, MapPin, Train, ChevronDown, CreditCard, Zap, Phone, Mail, ArrowUpRight, Users, Truck, Box, MessageSquare, Building2,
 } from "lucide-react";
 import Link from "next/link";
+import NavHeader from "@/app/components/NavHeader";
 import BookingForm from "./BookingForm";
 
 export default function VTCPage() {
@@ -162,7 +163,9 @@ export default function VTCPage() {
   };
 
   return (
-    <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-32 xl:pt-36 flex flex-col">
+    <>
+      <NavHeader ctaLabel="Réserver une navette" ctaHref="#booking" topBarRight="Navettes Aéroport 24h/24 7j/7" />
+      <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-32 xl:pt-36 flex flex-col">
 
       {/* === SCHEMA.ORG SEO === */}
       <script
@@ -566,5 +569,6 @@ export default function VTCPage() {
         </div>
       </footer>
     </main>
+    </>
   );
 }
