@@ -328,6 +328,91 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* === FAQ + RICH SNIPPET === */}
+        <section className="bg-slate-50 py-20 px-4">
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "Quel est le prix d'une navette Orléans → Orly ?",
+                  "acceptedAnswer": { "@type": "Answer", "text": "La navette Orléans–Orly est à partir de 180 € en berline privée, prix fixe sans supplément. Réservation 24h/24 au 06 34 60 57 99." }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Quel est le tarif pour une navette Orléans → Roissy CDG ?",
+                  "acceptedAnswer": { "@type": "Answer", "text": "La navette Orléans–Roissy CDG est à partir de 210 € en berline privée, prix fixe. Disponible 24h/24, 7j/7 avec chauffeur professionnel." }
+                },
+                {
+                  "@type": "Question",
+                  "name": "MAPETRANS LD est-il disponible la nuit et le week-end ?",
+                  "acceptedAnswer": { "@type": "Answer", "text": "Oui, nous sommes disponibles 24h/24, 7j/7, y compris les nuits, week-ends et jours fériés. Appelez le 06 34 60 57 99 pour toute urgence ou réservation." }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Proposez-vous des tarifs pour les entreprises ?",
+                  "acceptedAnswer": { "@type": "Answer", "text": "Oui, MAPETRANS LD propose des comptes entreprises avec facturation mensuelle, tarifs négociés et interlocuteur dédié. Contactez-nous via le formulaire entreprises pour un devis sous 2h." }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Faites-vous du transport de marchandises et du déménagement ?",
+                  "acceptedAnswer": { "@type": "Answer", "text": "Oui, en plus du VTC, nous assurons le transport de marchandises (fret express France & Europe) et le déménagement clé en main. Contactez notre équipe transport au 07 49 70 95 77." }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Quelle zone géographique couvrez-vous ?",
+                  "acceptedAnswer": { "@type": "Answer", "text": "Basés à Orléans (Loiret), nous intervenons dans tout le Centre-Val de Loire, l'Île-de-France et partout en France et en Europe pour le fret. Aucun déplacement trop loin pour nous." }
+                }
+              ]
+            })}}
+          />
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-[10px] font-bold text-blue-700 uppercase tracking-[0.3em] mb-3">Questions fréquentes</p>
+              <h2 className="text-3xl font-black text-slate-900 uppercase">Tout ce que vous devez savoir</h2>
+            </div>
+            <div className="flex flex-col gap-4">
+              {[
+                {
+                  q: "Quel est le prix d'une navette Orléans → Orly ?",
+                  a: "À partir de 180 € en berline privée, prix fixe sans supplément. Réservation 24h/24 au 06 34 60 57 99."
+                },
+                {
+                  q: "Quel est le tarif pour une navette Orléans → Roissy CDG ?",
+                  a: "À partir de 210 € en berline privée, prix fixe. Disponible 24h/24, 7j/7 avec chauffeur professionnel."
+                },
+                {
+                  q: "Êtes-vous disponibles la nuit et le week-end ?",
+                  a: "Oui, 24h/24, 7j/7 — nuits, week-ends et jours fériés inclus. Appelez le 06 34 60 57 99 pour toute urgence."
+                },
+                {
+                  q: "Proposez-vous des tarifs entreprises ?",
+                  a: "Oui : compte entreprise, facturation mensuelle, tarifs négociés et interlocuteur dédié. Devis sous 2h via notre formulaire entreprises."
+                },
+                {
+                  q: "Faites-vous du transport de marchandises et du déménagement ?",
+                  a: "Oui, en plus du VTC nous gérons le fret express France & Europe et le déménagement clé en main. Contactez le 07 49 70 95 77."
+                },
+                {
+                  q: "Quelle zone géographique couvrez-vous ?",
+                  a: "Basés à Orléans, nous intervenons dans tout le Centre-Val de Loire, l'Île-de-France et toute la France/Europe pour le fret."
+                },
+              ].map(({ q, a }) => (
+                <details key={q} className="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                  <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none font-bold text-slate-900 text-sm hover:text-blue-700 transition">
+                    {q}
+                    <span className="text-blue-700 text-xl font-black shrink-0 group-open:rotate-45 transition-transform duration-200">+</span>
+                  </summary>
+                  <p className="px-6 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-4">{a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* === BANDEAU PARTENAIRES === */}
         <section className="border-t border-b border-slate-100 bg-white py-10">
           <div className="max-w-7xl mx-auto px-4">
