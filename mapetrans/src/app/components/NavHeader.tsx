@@ -172,29 +172,30 @@ export default function NavHeader({
           {/* Right — desktop CTA + mobile hamburger */}
           <div className="flex items-center gap-3">
             {/* Desktop */}
-            <div className="hidden xl:flex items-center gap-6 pl-6">
-              <div className="flex flex-col items-end text-right">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Urgence &amp; Réservation</span>
-                <a href="tel:0634605799" className="text-lg font-bold text-slate-900 tracking-tight hover:text-blue-700 transition font-mono whitespace-nowrap">
-                  06 34 60 57 99
-                </a>
-              </div>
+            <div className="hidden xl:flex items-center gap-3 pl-4">
+              <a
+                href="tel:0634605799"
+                className="flex items-center gap-2 border border-slate-200 hover:border-blue-600 text-slate-700 hover:text-blue-700 px-4 py-2 rounded-xl font-bold text-[11px] tracking-wide transition whitespace-nowrap"
+              >
+                <Phone className="w-3.5 h-3.5" />
+                06 34 60 57 99
+              </a>
               <Link
                 href={ctaHref}
-                className="flex items-center gap-2 bg-slate-900 text-white text-[11px] px-5 py-3 rounded-xl font-bold hover:bg-blue-700 transition duration-300 shadow-lg tracking-wide uppercase whitespace-nowrap"
+                className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white text-[11px] px-5 py-2 rounded-xl font-bold transition shadow-md tracking-wide uppercase whitespace-nowrap"
               >
                 {ctaLabel}
               </Link>
             </div>
 
-            {/* Mobile : CTA Réserver */}
-            <Link
-              href={ctaHref}
-              className="xl:hidden flex items-center gap-2 bg-blue-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide shadow-md hover:bg-blue-800 transition whitespace-nowrap"
-              onClick={() => setMobileOpen(false)}
+            {/* Mobile : icône tel compact */}
+            <a
+              href="tel:0634605799"
+              className="xl:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition shadow-md"
+              aria-label="Appeler"
             >
-              {ctaLabel}
-            </Link>
+              <Phone className="w-4 h-4" />
+            </a>
 
             {/* Hamburger */}
             <button
