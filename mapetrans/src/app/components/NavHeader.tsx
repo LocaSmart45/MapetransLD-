@@ -188,14 +188,14 @@ export default function NavHeader({
               </Link>
             </div>
 
-            {/* Mobile : icône tel compact */}
-            <a
-              href="tel:0634605799"
-              className="xl:hidden flex items-center justify-center w-9 h-9 rounded-xl bg-blue-700 text-white hover:bg-blue-800 transition shadow-md"
-              aria-label="Appeler"
+            {/* Mobile : CTA Réserver + hamburger */}
+            <Link
+              href={ctaHref}
+              className="xl:hidden flex items-center gap-1.5 bg-blue-700 hover:bg-blue-800 text-white px-3 py-2 rounded-xl font-bold text-[11px] tracking-wide shadow-md transition whitespace-nowrap"
+              onClick={() => setMobileOpen(false)}
             >
-              <Phone className="w-4 h-4" />
-            </a>
+              {ctaLabel}
+            </Link>
 
             {/* Hamburger */}
             <button
