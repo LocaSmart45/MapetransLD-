@@ -94,18 +94,20 @@ export default function EntreprisesPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    await fetch("/api/leads", {
+    await fetch("https://hook.eu1.make.com/4xrhxw9kt57o7lpaqteinsba2j4ev9b3", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        type: "devis_entreprise",
-        source: "entreprises",
-        name: `${form.prenom} ${form.nom}`.trim(),
-        company: form.societe,
-        phone: form.tel,
+        prenom: form.prenom,
+        nom: form.nom,
+        societe: form.societe,
+        poste: form.poste,
         email: form.email,
-        message: `Poste: ${form.poste} | Service: ${form.service} | Volume: ${form.volume}\n${form.message}`,
-        page: "/entreprises",
+        telephone: form.tel,
+        service: form.service,
+        volume: form.volume,
+        message: form.message,
+        source: "Formulaire Devis Entreprises mapetransld.com",
       }),
     }).catch(() => null);
     setLoading(false);
