@@ -32,6 +32,7 @@ const VTC_SUBMENU = [
   { href: "/vtc-orleans-paris", label: "VTC Orléans → Paris", desc: "Berline privée dès 150€" },
   { href: "/tarifs-vtc-orleans", label: "Tarifs VTC Orléans", desc: "Tous nos prix détaillés" },
   { href: "/chauffeur-mariage-evenement-orleans", label: "Mariage & Événements", desc: "Privatisation & sur mesure" },
+  { href: "/vtc-gare-orleans", label: "Chauffeur Gare d'Orléans", desc: "Accueil nominatif, sans attente" },
 ];
 
 const OTHER_LINKS = [
