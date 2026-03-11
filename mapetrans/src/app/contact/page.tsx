@@ -69,45 +69,66 @@ export default function ContactPage() {
             <div>
                 <h2 className="text-2xl font-black text-slate-900 uppercase mb-8">Coordonnées Directes</h2>
                 
-                <div className="space-y-8">
-                    {/* TÉLÉPHONE */}
-                    <div className="flex gap-6 items-start group">
-                        <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition duration-300">
-                            <Phone className="w-6 h-6 text-blue-600 group-hover:text-white transition" />
-                        </div>
-                        <div>
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Exploitation & Urgence 24/7</p>
-                            <a href="tel:0634605799" className="text-2xl md:text-3xl font-black text-slate-900 hover:text-blue-700 transition block font-mono">
-                                06 34 60 57 99
+                <div className="space-y-6">
+                    {/* VTC & NAVETTES */}
+                    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                        <p className="text-[10px] font-black text-blue-700 uppercase tracking-[0.25em] mb-4">🚘 VTC, Navettes & Mariage</p>
+                        <div className="space-y-4">
+                            <a href="tel:0634605799" className="flex items-center gap-3 group">
+                                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition">
+                                    <Phone className="w-4 h-4 text-blue-600 group-hover:text-white transition" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Urgence & Réservation 24h/24</p>
+                                    <p className="text-xl font-black text-slate-900 group-hover:text-blue-700 transition font-mono">06 34 60 57 99</p>
+                                </div>
                             </a>
-                            <p className="text-sm text-slate-500 mt-1">Numéro secondaire : 09 59 07 04 33</p>
+                            <a href="mailto:contact@mapetransld.com" className="flex items-center gap-3 group">
+                                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition">
+                                    <Mail className="w-4 h-4 text-blue-600 group-hover:text-white transition" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email VTC</p>
+                                    <p className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition">contact@mapetransld.com</p>
+                                </div>
+                            </a>
                         </div>
                     </div>
 
-                    {/* EMAIL */}
-                    <div className="flex gap-6 items-start group">
-                        <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition duration-300">
-                            <Mail className="w-6 h-6 text-blue-600 group-hover:text-white transition" />
-                        </div>
-                        <div>
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Devis & Administratif</p>
-                            <a href="mailto:contact@mapetransld.com" className="text-xl font-bold text-slate-900 hover:text-blue-700 transition block">
-                                contact@mapetransld.com
+                    {/* TRANSPORT & DÉMÉNAGEMENT */}
+                    <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                        <p className="text-[10px] font-black text-blue-700 uppercase tracking-[0.25em] mb-4">📦 Transport, Logistique & Déménagement</p>
+                        <div className="space-y-4">
+                            <a href="tel:0749709577" className="flex items-center gap-3 group">
+                                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition">
+                                    <Phone className="w-4 h-4 text-blue-600 group-hover:text-white transition" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Cotation & Exploitation</p>
+                                    <p className="text-xl font-black text-slate-900 group-hover:text-blue-700 transition font-mono">07 49 70 95 77</p>
+                                </div>
+                            </a>
+                            <a href="mailto:transport@mapetransld.com" className="flex items-center gap-3 group">
+                                <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition">
+                                    <Mail className="w-4 h-4 text-blue-600 group-hover:text-white transition" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email Transport</p>
+                                    <p className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition">transport@mapetransld.com</p>
+                                </div>
                             </a>
                         </div>
                     </div>
 
                     {/* ADRESSE */}
-                    <div className="flex gap-6 items-start group">
-                        <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition duration-300">
-                            <MapPin className="w-6 h-6 text-blue-600 group-hover:text-white transition" />
+                    <div className="flex gap-4 items-start">
+                        <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center shrink-0">
+                            <MapPin className="w-4 h-4 text-blue-600" />
                         </div>
                         <div>
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Siège Social</p>
-                            <p className="text-lg font-bold text-slate-900 leading-snug">
-                                105 Route Nationale 20,<br/> 45520 Cercottes
-                            </p>
-                            <p className="text-xs text-slate-500 mt-2 italic">Uniquement sur rendez-vous.</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Siège Social</p>
+                            <p className="text-sm font-bold text-slate-900 leading-snug">105 Route Nationale 20, 45520 Cercottes</p>
+                            <p className="text-xs text-slate-500 mt-1 italic">Uniquement sur rendez-vous.</p>
                         </div>
                     </div>
                 </div>
