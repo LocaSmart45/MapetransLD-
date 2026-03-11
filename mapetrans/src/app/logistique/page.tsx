@@ -14,7 +14,7 @@ export default function LogistiquePage() {
     "description": "Transport express, fret routier et logistique B2B depuis Orléans. Coursier urgence, affrètement national et européen, Loiret et Centre-Val de Loire.",
     "url": "https://www.mapetransld.com/logistique",
     "telephone": "+33634605799",
-    "email": "contact@mapetransld.com",
+    "email": "transport@mapetransld.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "105 Route Nationale 20",
@@ -128,10 +128,10 @@ export default function LogistiquePage() {
                 <p className="text-slate-500 text-sm mb-8 max-w-xs mx-auto">
                     Pour vos transports planifiés, appels d'offres ou affrètement régulier. Réponse sous 30 minutes.
                 </p>
-                <a href="mailto:contact@mapetransld.com?subject=Demande de Cotation Transport" className="w-full bg-blue-700 text-white font-black h-14 rounded-sm uppercase tracking-wide text-sm shadow-xl hover:bg-blue-800 transition flex items-center justify-center gap-3">
+                <a href="mailto:transport@mapetransld.com?subject=Demande de Cotation Transport" className="w-full bg-blue-700 text-white font-black h-14 rounded-sm uppercase tracking-wide text-sm shadow-xl hover:bg-blue-800 transition flex items-center justify-center gap-3">
                     <Mail className="w-5 h-5" /> Envoyer un Email
                 </a>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4">contact@mapetransld.com</span>
+                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4">transport@mapetransld.com</span>
             </div>
 
         </div>
@@ -337,10 +337,10 @@ export default function LogistiquePage() {
               📞 07 49 70 95 77
             </a>
             <a
-              href="mailto:contact@mapetransld.com"
+              href="mailto:transport@mapetransld.com"
               className="inline-flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-50 transition"
             >
-              ✉ contact@mapetransld.com
+              ✉ transport@mapetransld.com
             </a>
           </div>
         </div>
@@ -380,7 +380,7 @@ export default function LogistiquePage() {
               <div className="flex flex-col gap-4 text-sm font-bold">
                 <a href="tel:0749709577" className="flex items-center gap-3 hover:text-blue-400 transition"><Phone className="w-4 h-4 text-blue-600" /> 07 49 70 95 77</a>
                 <div className="flex items-center gap-3 text-slate-400"><Phone className="w-4 h-4 text-blue-600" /> 09 59 07 04 33</div>
-                <a href="mailto:contact@mapetransld.com" className="flex items-center gap-3 hover:text-blue-400 transition"><Mail className="w-4 h-4 text-blue-600" /> contact@mapetransld.com</a>
+                <a href="mailto:transport@mapetransld.com" className="flex items-center gap-3 hover:text-blue-400 transition"><Mail className="w-4 h-4 text-blue-600" /> transport@mapetransld.com</a>
                 <div className="flex items-center gap-3 text-slate-400 mt-2"><MapPin className="w-4 h-4 text-blue-600" /> Orléans & France Entière</div>
               </div>
             </div>
