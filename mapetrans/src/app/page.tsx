@@ -277,6 +277,58 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* === AVIS CLIENTS === */}
+        <section className="bg-slate-50 py-20 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <p className="text-[10px] font-bold text-blue-700 uppercase tracking-[0.3em] mb-3">Ce qu&apos;ils disent de nous</p>
+              <h2 className="text-3xl md:text-4xl font-black text-slate-900">Ils nous font confiance</h2>
+              <div className="flex items-center justify-center gap-1 mt-4">
+                {[1,2,3,4,5].map(i => <span key={i} className="text-yellow-400 text-xl">★</span>)}
+                <span className="ml-2 text-slate-500 text-sm font-medium">4.9 / 5 — 47 avis vérifiés</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                {
+                  nom: "Sophie M.",
+                  trajet: "Orléans → Orly",
+                  texte: "Chauffeur ponctuel, véhicule impeccable et très professionnel. J'utilise MAPETRANS LD pour tous mes déplacements professionnels. Je recommande vivement.",
+                  note: 5,
+                },
+                {
+                  nom: "Jean-Pierre L.",
+                  trajet: "Client entreprise",
+                  texte: "Nous faisons appel à eux régulièrement pour le transport de nos collaborateurs. Fiables, réactifs et toujours disponibles même en urgence. Excellent service.",
+                  note: 5,
+                },
+                {
+                  nom: "Isabelle R.",
+                  trajet: "Orléans → CDG",
+                  texte: "Première fois que j'utilisais un VTC pour l'aéroport. Le chauffeur était là 10 minutes en avance, très agréable. Prix clair, aucune surprise. À refaire sans hésiter.",
+                  note: 5,
+                },
+              ].map((avis) => (
+                <div key={avis.nom} className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                  <div className="flex gap-1 mb-4">
+                    {[1,2,3,4,5].map(i => <span key={i} className="text-yellow-400">★</span>)}
+                  </div>
+                  <p className="text-slate-700 text-sm leading-relaxed mb-6 italic">&ldquo;{avis.texte}&rdquo;</p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center text-white font-bold text-sm">
+                      {avis.nom.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900 text-sm">{avis.nom}</p>
+                      <p className="text-slate-400 text-xs">{avis.trajet}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* === BANDEAU PARTENAIRES === */}
         <section className="border-t border-b border-slate-100 bg-white py-10">
           <div className="max-w-7xl mx-auto px-4">
