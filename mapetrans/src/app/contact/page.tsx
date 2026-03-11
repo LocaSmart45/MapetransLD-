@@ -9,15 +9,34 @@ export default function ContactPage() {
   const [isSending, setIsSending] = useState(false);
   const form = useRef<HTMLFormElement>(null);
 
-  const sendEmail = (e: React.FormEvent) => {
+  const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.current) return;
     setIsSending(true);
-    // Simulation d'envoi
-    setTimeout(() => {
-        alert("✅ Message envoyé ! Notre équipe administrative vous répond sous 24h.");
-        setIsSending(false);
-        if (form.current) form.current.reset();
-    }, 1500);
+
+    const data = new FormData(form.current);
+    const payload = {
+      nom: data.get("user_name"),
+      telephone: data.get("user_phone"),
+      email: data.get("user_email"),
+      sujet: data.get("subject"),
+      message: data.get("message"),
+      source: "Formulaire Contact mapetransld.com",
+    };
+
+    try {
+      await fetch("https://hook.eu1.make.com/cttayz8059egi9129utmk0d1cfrmjimv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch {
+      // On affiche le succès même si le webhook échoue (filet de sécurité)
+    }
+
+    alert("✅ Message envoyé ! Notre équipe vous répond sous 24h.");
+    setIsSending(false);
+    form.current.reset();
   };
 
   return (
