@@ -46,7 +46,6 @@ const VTC_SUBMENU = [
 ];
 
 const OTHER_LINKS = [
-  { href: "/agence", label: "L'Agence", Icon: Building2 },
   { href: "/logistique", label: "Logistique & Fret", Icon: Truck },
   { href: "/demenagement", label: "Déménagement", Icon: Box },
   { href: "/entreprises", label: "Entreprises", Icon: Briefcase },
