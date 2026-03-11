@@ -109,10 +109,10 @@ export default function NavHeader({
           </Link>
 
           {/* Desktop menu */}
-          <div className="hidden xl:flex items-center text-[10px] font-extrabold text-slate-600 tracking-widest uppercase">
+          <div className="hidden xl:flex items-center h-full text-[10px] font-extrabold text-slate-600 tracking-widest uppercase">
             <Link
               href="/agence"
-              className={`px-4 py-2 flex items-center gap-2 border-r border-slate-100 transition ${pathname === "/agence" ? "text-blue-700" : "hover:text-blue-700"}`}
+              className={`px-4 h-full flex items-center gap-2 border-r border-slate-100 transition ${pathname === "/agence" ? "text-blue-700" : "hover:text-blue-700"}`}
             >
               <Building2 className={`w-4 h-4 ${pathname === "/agence" ? "text-blue-700" : "text-slate-400"}`} />
               L&apos;Agence
@@ -120,11 +120,11 @@ export default function NavHeader({
 
             {/* VTC dropdown */}
             <div
-              className="relative border-r border-slate-100"
+              className="relative border-r border-slate-100 h-full flex items-center"
               onMouseEnter={openDropdown}
               onMouseLeave={closeDropdown}
             >
-              <button className={`px-4 py-8 flex items-center gap-2 transition ${isVtcActive ? "text-blue-700" : "hover:text-blue-700 text-slate-600"}`}>
+              <button className={`px-4 h-full flex items-center gap-2 transition ${isVtcActive ? "text-blue-700" : "hover:text-blue-700 text-slate-600"}`}>
                 <Users className={`w-4 h-4 ${isVtcActive ? "text-blue-700" : "text-slate-400"}`} />
                 VTC &amp; Chauffeurs
                 <ChevronDown className={`w-3 h-3 ml-0.5 opacity-60 transition-transform duration-200 ${vtcHover ? "rotate-180" : ""}`} />
@@ -160,7 +160,7 @@ export default function NavHeader({
                 <Link
                   key={href}
                   href={href}
-                  className={`px-4 py-2 flex items-center gap-2 transition ${isLast ? "" : "border-r border-slate-100"} ${isActive ? "text-blue-700" : "hover:text-blue-700"}`}
+                  className={`px-4 h-full flex items-center gap-2 transition ${isLast ? "" : "border-r border-slate-100"} ${isActive ? "text-blue-700" : "hover:text-blue-700"}`}
                 >
                   <Icon className={`w-4 h-4 ${isActive ? "text-blue-700" : "text-slate-400"}`} />
                   {label}
