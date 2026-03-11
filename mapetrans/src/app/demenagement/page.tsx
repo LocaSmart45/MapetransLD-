@@ -107,8 +107,8 @@ export default function DemenagementPage() {
                 <p className="text-slate-400 text-sm mb-8 max-w-xs mx-auto">
                     Vous connaissez votre volume ? Appelez-nous pour une estimation tarifaire immédiate et réserver votre date.
                 </p>
-                <a href="tel:0634605799" className="w-full bg-white text-slate-900 font-black h-14 rounded-sm uppercase tracking-wide text-sm shadow-xl hover:bg-slate-100 transition flex items-center justify-center gap-3">
-                    <Phone className="w-5 h-5 text-blue-600" /> Appeler le 06 34 60 57 99
+                <a href="tel:0749709577" className="w-full bg-white text-slate-900 font-black h-14 rounded-sm uppercase tracking-wide text-sm shadow-xl hover:bg-slate-100 transition flex items-center justify-center gap-3">
+                    <Phone className="w-5 h-5 text-blue-600" /> Appeler le 07 49 70 95 77
                 </a>
                 <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-4">Disponible du Lundi au Samedi</span>
             </div>
@@ -302,10 +302,10 @@ export default function DemenagementPage() {
           </p>
           <div className="flex flex-wrap gap-3">
             <a
-              href="tel:0634605799"
+              href="tel:0749709577"
               className="inline-flex items-center gap-2 bg-blue-700 text-white px-5 py-2.5 rounded-full font-bold text-sm hover:bg-blue-800 transition"
             >
-              📞 06 34 60 57 99
+              📞 07 49 70 95 77
             </a>
             <a
               href="mailto:contact@mapetransld.com"
@@ -325,7 +325,7 @@ export default function DemenagementPage() {
               <span className="text-lg font-bold">Vous préparez votre déménagement ?</span>
               <span className="text-blue-100 text-sm mt-1">Ne stressez plus. Contactez Mapetrans pour une visite gratuite.</span>
             </div>
-            <a href="tel:0634605799" className="bg-slate-900 text-white px-8 py-3 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-black transition shadow-lg border border-transparent hover:border-slate-700">
+            <a href="tel:0749709577" className="bg-slate-900 text-white px-8 py-3 rounded-sm font-bold uppercase tracking-widest text-xs hover:bg-black transition shadow-lg border border-transparent hover:border-slate-700">
               <Phone className="w-4 h-4 inline mr-2"/> APPELER MAINTENANT
             </a>
           </div>
@@ -349,7 +349,7 @@ export default function DemenagementPage() {
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest mb-6 text-slate-400">Nous Contacter</h3>
               <div className="flex flex-col gap-4 text-sm font-bold">
-                <a href="tel:0634605799" className="flex items-center gap-3 hover:text-blue-400 transition"><Phone className="w-4 h-4 text-blue-600" /> 06 34 60 57 99</a>
+                <a href="tel:0749709577" className="flex items-center gap-3 hover:text-blue-400 transition"><Phone className="w-4 h-4 text-blue-600" /> 07 49 70 95 77</a>
                 <div className="flex items-center gap-3 text-slate-400"><Phone className="w-4 h-4 text-blue-600" /> 09 59 07 04 33</div>
                 <a href="mailto:contact@mapetransld.com" className="flex items-center gap-3 hover:text-blue-400 transition"><Mail className="w-4 h-4 text-blue-600" /> contact@mapetransld.com</a>
                 <div className="flex items-center gap-3 text-slate-400 mt-2"><MapPin className="w-4 h-4 text-blue-600" /> Orléans & France Entière</div>
