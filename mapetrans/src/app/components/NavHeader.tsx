@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -24,6 +24,16 @@ interface NavHeaderProps {
   ctaHref?: string;
   topBarRight?: string;
 }
+
+const VTC_HREFS = [
+  "/vtc",
+  "/navette-orleans-orly",
+  "/navette-orleans-roissy-cdg",
+  "/vtc-orleans-paris",
+  "/tarifs-vtc-orleans",
+  "/chauffeur-mariage-evenement-orleans",
+  "/vtc-gare-orleans",
+];
 
 const VTC_SUBMENU = [
   { href: "/vtc", label: "VTC & Chauffeurs privés", desc: "Réservation & tarifs" },
@@ -52,9 +62,18 @@ export default function NavHeader({
   const [vtcHover, setVtcHover] = useState(false);
   const [vtcMobileOpen, setVtcMobileOpen] = useState(false);
   const pathname = usePathname();
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isVtcActive =
-    pathname === "/vtc" || pathname.startsWith("/navette-orleans");
+  const isVtcActive = VTC_HREFS.includes(pathname);
+
+  // Delay closing so mouse can move from button → dropdown without flickering
+  const openDropdown = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setVtcHover(true);
+  };
+  const closeDropdown = () => {
+    closeTimer.current = setTimeout(() => setVtcHover(false), 150);
+  };
 
   // Hauteur réelle du header mobile : topbar (36px) + nav (80px) = 116px
   const MOBILE_HEADER_H = "top-[116px]";
@@ -103,8 +122,8 @@ export default function NavHeader({
             {/* VTC dropdown */}
             <div
               className="relative border-r border-slate-100"
-              onMouseEnter={() => setVtcHover(true)}
-              onMouseLeave={() => setVtcHover(false)}
+              onMouseEnter={openDropdown}
+              onMouseLeave={closeDropdown}
             >
               <button className={`px-4 py-8 flex items-center gap-2 transition ${isVtcActive ? "text-blue-700" : "hover:text-blue-700 text-slate-600"}`}>
                 <Users className={`w-4 h-4 ${isVtcActive ? "text-blue-700" : "text-slate-400"}`} />
@@ -112,7 +131,11 @@ export default function NavHeader({
                 <ChevronDown className={`w-3 h-3 ml-0.5 opacity-60 transition-transform duration-200 ${vtcHover ? "rotate-180" : ""}`} />
               </button>
               {vtcHover && (
-                <div className="absolute top-full left-0 w-64 bg-white border border-slate-100 shadow-xl rounded-b-xl z-50">
+                <div
+                  className="absolute top-full left-0 w-64 bg-white border border-slate-100 shadow-xl rounded-b-xl z-50"
+                  onMouseEnter={openDropdown}
+                  onMouseLeave={closeDropdown}
+                >
                   {VTC_SUBMENU.map(({ href, label, desc }) => (
                     <Link
                       key={href}
