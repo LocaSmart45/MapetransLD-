@@ -1,83 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Building2, Truck, Users, MessageSquare, Box, Menu, X, Phone, CheckCircle, Clock } from 'lucide-react';
-import Link from 'next/link';
+import NavHeader from "@/app/components/NavHeader";
+import Link from "next/link";
 
 export default function MentionsLegalesPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   return (
-    <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[120px] flex flex-col">
-      
-      {/* HEADER (Identique aux autres pages) */}
-      <header className="fixed top-0 w-full z-50 shadow-sm bg-white transition-all duration-300">
-        <div className="bg-slate-900 text-slate-300 h-9 md:h-10 flex items-center justify-between text-[9px] md:text-[11px] font-medium tracking-wide uppercase px-4 overflow-hidden whitespace-nowrap">
-          <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
-            <Clock className="w-3 h-3 text-blue-400" />
-            <span className="text-white font-bold">Astreinte 24h/24 7j/7</span>
-          </div>
-          <div className="flex items-center gap-1.5 md:gap-2 min-w-fit">
-            <CheckCircle className="w-3 h-3 text-green-400" />
-            <span className="hidden md:inline">Devis Gratuit & Réponse Immédiate</span>
-            <span className="md:hidden">Réponse Immédiate</span>
-          </div>
-        </div>
-
-        <nav className="border-b border-slate-200 h-20 md:h-24 flex items-center relative bg-white z-50">
-          <div className="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
-            <div className="flex flex-col leading-none cursor-pointer group pr-2">
-              <Link href="/">
-                <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900">
-                  MAPETRANS <span className="text-blue-700">LD</span>
-                </span>
-              </Link>
-              <span className="text-[8px] md:text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1 ml-0.5">
-                Solutions de Transport
-              </span>
-            </div>
-            
-            <div className="hidden xl:flex items-center text-[10px] font-extrabold text-slate-600 tracking-widest uppercase">
-              <Link href="/agence" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Building2 className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> L'Agence
-              </Link>
-              <Link href="/vtc" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Users className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> VTC & Chauffeurs
-              </Link>
-              <Link href="/logistique" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Truck className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> Logistique & Fret
-              </Link>
-              <Link href="/demenagement" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group border-r border-slate-100 last:border-0">
-                <Box className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> Déménagement
-              </Link>
-              <Link href="/contact" className="hover:text-blue-700 transition px-4 py-2 flex items-center gap-2 group">
-                <MessageSquare className="w-4 h-4 text-slate-400 group-hover:text-blue-700 transition" /> Contact
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-3 md:gap-4">
-              <a href="tel:0634605799" className="xl:hidden flex items-center gap-2 bg-blue-700 text-white px-3 py-2 rounded-sm shadow-md hover:bg-blue-800 transition">
-                <Phone className="w-3 h-3" /> <span className="text-[10px] font-black tracking-wider">06 34 60 57 99</span>
-              </a>
-              <button className="xl:hidden p-1 text-slate-800" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-                {isMobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 top-28 z-40 bg-white border-t border-slate-100 p-6 flex flex-col gap-6 xl:hidden overflow-y-auto pb-32">
-            <div className="flex flex-col gap-4 text-sm font-black uppercase tracking-wider text-slate-800">
-              <Link href="/agence" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Building2 className="w-5 h-5 text-blue-700" /> L'Agence</Link>
-              <Link href="/vtc" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Users className="w-5 h-5 text-blue-700" /> VTC & Chauffeurs</Link>
-              <Link href="/logistique" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Truck className="w-5 h-5 text-blue-700" /> Logistique & Fret</Link>
-              <Link href="/demenagement" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><Box className="w-5 h-5 text-blue-700" /> Déménagement</Link>
-              <Link href="/contact" className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100" onClick={() => setIsMobileMenuOpen(false)}><MessageSquare className="w-5 h-5 text-blue-700" /> Contact</Link>
-            </div>
-          </div>
-        )}
-      </header>
+    <>
+      <NavHeader ctaLabel="Nous Contacter" ctaHref="/contact" />
+      <main className="relative min-h-screen font-sans text-slate-800 bg-slate-50 pt-[116px] flex flex-col">
 
       {/* CONTENU MENTIONS LÉGALES */}
       <div className="max-w-4xl mx-auto px-6 py-12">
@@ -141,5 +71,6 @@ export default function MentionsLegalesPage() {
       </footer>
 
     </main>
+    </>
   );
 }
