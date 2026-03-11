@@ -145,15 +145,15 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
 
-      // --- 5. TARIFS (Vers VTC par défaut) ---
+      // --- 5. TARIFS ---
       {
         source: '/page/tarifs-transports-marchandises-et-personnes-orleans-loiret/',
-        destination: '/vtc',
+        destination: '/tarifs-vtc-orleans',
         permanent: true,
       },
       {
         source: '/page/tarifs-transports-marchandises-et-personnes-orleans-loiret',
-        destination: '/vtc',
+        destination: '/tarifs-vtc-orleans',
         permanent: true,
       },
 
