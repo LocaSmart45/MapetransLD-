@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import NavHeader from "@/app/components/NavHeader";
 import { CheckCircle, Phone, ArrowRight, Clock, MapPin, Users } from "lucide-react";
+import Footer from '@/app/components/Footer';
 
 export const metadata: Metadata = {
   title: "Tarifs VTC Orléans 2025 | Prix Navette Aéroport | MAPETRANS LD",
@@ -272,15 +273,7 @@ export default function TarifsPage() {
         </section>
 
         {/* FOOTER minimal */}
-        <footer className="bg-black text-white py-6 px-6">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-[10px] text-slate-600 uppercase tracking-wide gap-4">
-            <span>Copyright 2025, Mapetrans LD. Tous droits réservés.</span>
-            <div className="flex gap-6">
-              <Link href="/mentions-legales" className="hover:text-slate-400 transition">Mentions Légales</Link>
-              <Link href="/confidentialite" className="hover:text-slate-400 transition">Politique de Confidentialité</Link>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </>
   );

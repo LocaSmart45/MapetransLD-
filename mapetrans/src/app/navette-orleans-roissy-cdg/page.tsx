@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import NavHeader from "@/app/components/NavHeader";
+import Footer from '@/app/components/Footer';
 
 export const metadata: Metadata = {
   title: "Navette Orléans → Roissy CDG | Prix Fixe 210€ | MAPETRANS LD",
@@ -372,20 +373,7 @@ export default function NavetteOrleansRoissyCDGPage() {
         </section>
 
         {/* FOOTER MINIMAL */}
-        <footer className="py-8 bg-slate-900 text-slate-400 text-center text-sm">
-          <div className="max-w-4xl mx-auto px-6">
-            <Link href="/" className="font-black text-white">MAPETRANS LD</Link>
-            {" "}· Transport & Logistique · Orléans, Loiret ·{" "}
-            <a href="tel:0634605799" className="hover:text-white transition">06 34 60 57 99</a>
-            <div className="mt-2 flex flex-wrap justify-center gap-4 text-xs">
-              <Link href="/vtc" className="hover:text-white transition">VTC & Navettes</Link>
-              <Link href="/navette-orleans-orly" className="hover:text-white transition">Navette Orly</Link>
-              <Link href="/logistique" className="hover:text-white transition">Logistique</Link>
-              <Link href="/contact" className="hover:text-white transition">Contact</Link>
-              <Link href="/mentions-legales" className="hover:text-white transition">Mentions légales</Link>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </>
   );
