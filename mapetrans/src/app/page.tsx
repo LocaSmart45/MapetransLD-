@@ -55,13 +55,22 @@ export const metadata: Metadata = {
 
 const schemaOrg = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": ["LocalBusiness", "TaxiService"],
   "name": "MAPETRANS LD",
-  "description": "Société de transport et logistique basée à Orléans (Loiret). VTC & navettes aéroport, fret express, déménagement.",
+  "description": "Société de transport et logistique basée à Orléans (Loiret). VTC & navettes aéroport, fret express, déménagement. Disponible 24h/24 7j/7.",
   "url": "https://www.mapetransld.com",
   "telephone": "+33634605799",
   "email": "contact@mapetransld.com",
   "priceRange": "€€",
+  "image": "https://www.mapetransld.com/icon.svg",
+  "logo": "https://www.mapetransld.com/icon.svg",
+  "foundingDate": "2013",
+  "areaServed": [
+    { "@type": "City", "name": "Orléans" },
+    { "@type": "AdministrativeArea", "name": "Loiret" },
+    { "@type": "AdministrativeArea", "name": "Centre-Val de Loire" },
+    { "@type": "Country", "name": "France" }
+  ],
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "105 Route Nationale 20",
@@ -81,14 +90,54 @@ const schemaOrg = {
     "opens": "00:00",
     "closes": "23:59"
   },
-  "sameAs": ["https://www.mapetransld.com"],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "47",
+    "bestRating": "5"
+  },
+  "sameAs": [
+    "https://www.mapetransld.com"
+  ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Services MAPETRANS LD",
     "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "VTC & Navettes Aéroport Orléans", "description": "Navette privée Orléans vers Orly dès 180€ et Roissy CDG dès 210€. Prix fixe garanti." } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport & Logistique Fret" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Déménagement & Garde-meubles Orléans" } }
+      {
+        "@type": "Offer",
+        "url": "https://www.mapetransld.com/vtc",
+        "itemOffered": { "@type": "Service", "name": "VTC & Chauffeur Privé Orléans", "description": "Chauffeur privé VTC à Orléans, disponible 24h/24. Berline haut de gamme, tarifs fixes." }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://www.mapetransld.com/navette-orleans-orly",
+        "itemOffered": { "@type": "Service", "name": "Navette Orléans Orly", "description": "Navette privée Orléans → Orly à partir de 180€. Prix fixe, chauffeur professionnel." }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://www.mapetransld.com/navette-orleans-roissy-cdg",
+        "itemOffered": { "@type": "Service", "name": "Navette Orléans Roissy CDG", "description": "Navette privée Orléans → Roissy CDG à partir de 210€. Prix fixe, 24h/24." }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://www.mapetransld.com/vtc-orleans-paris",
+        "itemOffered": { "@type": "Service", "name": "VTC Orléans Paris", "description": "Trajet Orléans–Paris en berline privée. 1h30, prix fixe, chauffeur pro." }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://www.mapetransld.com/chauffeur-mariage-evenement-orleans",
+        "itemOffered": { "@type": "Service", "name": "Chauffeur Mariage & Événement Orléans", "description": "Chauffeur privé pour mariages et événements à Orléans. Véhicule haut de gamme, discrétion garantie." }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://www.mapetransld.com/logistique",
+        "itemOffered": { "@type": "Service", "name": "Transport & Logistique Fret", "description": "Fret express France & Europe depuis Orléans. Livraison J+1, traçabilité en temps réel." }
+      },
+      {
+        "@type": "Offer",
+        "url": "https://www.mapetransld.com/demenagement",
+        "itemOffered": { "@type": "Service", "name": "Déménagement Orléans & Loiret", "description": "Déménagement clé en main à Orléans. Emballage, transport, garde-meuble." }
+      }
     ]
   }
 };
