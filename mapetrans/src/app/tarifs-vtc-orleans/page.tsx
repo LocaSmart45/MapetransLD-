@@ -5,7 +5,7 @@ import { CheckCircle, Phone, ArrowRight, Clock, MapPin, Users } from "lucide-rea
 import Footer from '@/app/components/Footer';
 
 export const metadata: Metadata = {
-  title: "Tarifs VTC Orléans 2025 | Prix Navette Aéroport | MAPETRANS LD",
+  title: "Tarifs VTC Orléans 2026 | Prix Navette Aéroport | MAPETRANS LD",
   description:
     "Tarifs VTC Orléans : navette Orly dès 180€, Roissy CDG dès 210€. Prix fixe garanti, aucune surprise. Devis gratuit en 2 minutes pour tout trajet depuis Orléans et le Loiret.",
   keywords: [
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://www.mapetransld.com/tarifs-vtc-orleans" },
   openGraph: {
-    title: "Tarifs VTC Orléans 2025 | Prix Navette Aéroport | MAPETRANS LD",
+    title: "Tarifs VTC Orléans 2026 | Prix Navette Aéroport | MAPETRANS LD",
     description: "Navette Orly dès 180€, Roissy CDG dès 210€. Prix fixe, aucune surprise.",
     url: "https://www.mapetransld.com/tarifs-vtc-orleans",
     siteName: "Mapetrans LD",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 const schemaOrg = {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "VTC & Navette Aéroport Orléans — Tarifs 2025",
+  "name": "VTC & Navette Aéroport Orléans — Tarifs 2026",
   "description": "Tarifs fixes pour navettes aéroport et VTC depuis Orléans et le Loiret. Orly dès 180€, Roissy CDG dès 210€.",
   "provider": {
     "@type": "LocalBusiness",
@@ -122,7 +122,7 @@ export default function TarifsPage() {
               <MapPin className="w-3 h-3" /> Orléans & Loiret — Prix fixe garanti
             </span>
             <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tight mb-4">
-              Tarifs VTC Orléans 2025
+              Tarifs VTC Orléans 2026
             </h1>
             <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-8">
               Prix fixes sans surprise pour vos navettes aéroport, transferts gares et courses longue distance depuis Orléans et tout le Loiret. Le tarif est confirmé avant la course.
