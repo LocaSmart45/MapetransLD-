@@ -14,7 +14,7 @@ export default function VTCPage() {
     "description": "Navette Aéroport et Chauffeur VTC privé à Orléans. Navettes aéroport Orly dès 180€, Roissy CDG dès 210€. Service 24h/24 7j/7 depuis tout le Loiret.",
     "url": "https://www.mapetransld.com/vtc",
     "telephone": "+33634605799",
-    "email": "contact@mapetransld.com",
+    "email": "navettes@mapetransld.com",
     "priceRange": "€€",
     "areaServed": {
       "@type": "GeoCircle",

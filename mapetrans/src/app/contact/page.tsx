@@ -103,13 +103,13 @@ export default function ContactPage() {
                                     <p className="text-xl font-black text-slate-900 group-hover:text-blue-700 transition font-mono">06 34 60 57 99</p>
                                 </div>
                             </a>
-                            <a href="mailto:contact@mapetransld.com" className="flex items-center gap-3 group">
+                            <a href="mailto:navettes@mapetransld.com" className="flex items-center gap-3 group">
                                 <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-700 transition">
                                     <Mail className="w-4 h-4 text-blue-600 group-hover:text-white transition" />
                                 </div>
                                 <div>
                                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email VTC</p>
-                                    <p className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition">contact@mapetransld.com</p>
+                                    <p className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition">navettes@mapetransld.com</p>
                                 </div>
                             </a>
                         </div>

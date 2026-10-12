@@ -32,7 +32,7 @@ const schemaOrg = {
     "@type": "LocalBusiness",
     name: "MAPETRANS LD",
     telephone: "+33634605799",
-    email: "contact@mapetransld.com",
+    email: "navettes@mapetransld.com",
     address: {
       "@type": "PostalAddress",
       streetAddress: "105 Route Nationale 20",
