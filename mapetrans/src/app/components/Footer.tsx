@@ -92,8 +92,8 @@ export default function Footer() {
                 <a href="tel:0634605799" className="flex items-center gap-3 text-slate-300 hover:text-blue-400 transition font-bold">
                   <Phone className="w-4 h-4 text-blue-600 shrink-0" /> 06 34 60 57 99
                 </a>
-                <a href="mailto:contact@mapetransld.com" className="flex items-center gap-3 text-slate-400 hover:text-blue-400 transition mt-1.5 text-xs">
-                  <Mail className="w-3 h-3 text-blue-600 shrink-0" /> contact@mapetransld.com
+                <a href="mailto:navettes@mapetransld.com" className="flex items-center gap-3 text-slate-400 hover:text-blue-400 transition mt-1.5 text-xs">
+                  <Mail className="w-3 h-3 text-blue-600 shrink-0" /> navettes@mapetransld.com
                 </a>
               </div>
               <div>
