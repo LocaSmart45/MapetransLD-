@@ -318,8 +318,8 @@ export default function VTCPage() {
               <Info className="w-6 h-6 text-blue-600" /> Infos & Suppléments
             </h3>
             <ul className="space-y-4 text-sm font-medium text-slate-600">
-              <li className="flex justify-between border-b border-slate-100 pb-3"><span className="flex items-center gap-2"><Moon className="w-4 h-4 text-slate-400" /> Nuit (20h-05h)</span><span className="text-slate-900 font-bold">+20€</span></li>
-              <li className="flex justify-between border-b border-slate-100 pb-3"><span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-slate-400" /> Dimanche & Férié</span><span className="text-slate-900 font-bold">+20€</span></li>
+              <li className="flex justify-between border-b border-slate-100 pb-3"><span className="flex items-center gap-2"><Moon className="w-4 h-4 text-slate-400" /> Nuit (21h-6h)</span><span className="text-slate-900 font-bold">+20€</span></li>
+              <li className="flex justify-between border-b border-slate-100 pb-3"><span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-slate-400" /> Dimanche & Férié</span><span className="text-slate-900 font-bold">+30€</span></li>
               <li className="flex justify-between border-b border-slate-100 pb-3"><span className="flex items-center gap-2"><Briefcase className="w-4 h-4 text-slate-400" /> Bagages supp.</span><span className="text-slate-900 font-bold">10€ <span className="text-[10px] font-normal text-slate-400">/unité</span></span></li>
               <li className="flex justify-between"><span className="flex items-center gap-2"><MapPin className="w-4 h-4 text-slate-400" /> Hors Agglo (&gt;10km)</span><span className="text-slate-900 font-bold">0,80€ <span className="text-[10px] font-normal text-slate-400">/km</span></span></li>
             </ul>

@@ -94,7 +94,7 @@ const schemaFAQ = {
       "name": "Y a-t-il des suppléments sur les tarifs VTC Orléans ?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Les suppléments éventuels sont : nuit (20h-5h) +20€, dimanche et jours fériés +20€, bagages supplémentaires 10€/unité, hors agglomération 0,80€/km. L'attente pour retard avion est gratuite jusqu'à 35 minutes.",
+        "text": "Les suppléments éventuels sont : nuit (21h-6h) +20€, dimanche et jours fériés +30€, bagages supplémentaires 10€/unité, hors agglomération 0,80€/km. L'attente pour retard avion est gratuite jusqu'à 35 minutes.",
       },
     },
     {
@@ -195,8 +195,8 @@ export default function TarifsPage() {
             <h3 className="font-black uppercase text-sm text-slate-700 mb-4">Suppléments & Conditions</h3>
             <div className="grid sm:grid-cols-2 gap-3 text-xs text-slate-600">
               {[
-                { label: "Nuit (20h – 5h)", value: "+20€" },
-                { label: "Dimanche & Jours fériés", value: "+20€" },
+                { label: "Nuit (21h – 6h)", value: "+20€" },
+                { label: "Dimanche & Jours fériés", value: "+30€" },
                 { label: "Bagage supplémentaire", value: "10€ / unité" },
                 { label: "Hors agglomération (> 10 km)", value: "0,80€ / km" },
                 { label: "Attente retard avion/train", value: "Gratuit jusqu'à 35 min" },
